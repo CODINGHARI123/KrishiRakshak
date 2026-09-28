@@ -1,0 +1,174 @@
+﻿55448 images, 39 classes
+split: train=38813 val=8317 test=8318
+extracting MobileNetV2 features (one-time)...
+  64/55448 images  (6 img/s, ~166.3 min left)
+  3264/55448 images  (20 img/s, ~43.0 min left)
+  6464/55448 images  (22 img/s, ~37.1 min left)
+  9664/55448 images  (23 img/s, ~33.3 min left)
+  12864/55448 images  (23 img/s, ~31.0 min left)
+  16064/55448 images  (23 img/s, ~28.6 min left)
+  19264/55448 images  (23 img/s, ~25.8 min left)
+  22464/55448 images  (23 img/s, ~23.5 min left)
+  25664/55448 images  (23 img/s, ~21.2 min left)
+  28864/55448 images  (24 img/s, ~18.8 min left)
+  32064/55448 images  (24 img/s, ~16.4 min left)
+  35264/55448 images  (24 img/s, ~14.1 min left)
+  38464/55448 images  (24 img/s, ~11.9 min left)
+  41664/55448 images  (24 img/s, ~9.7 min left)
+  44864/55448 images  (24 img/s, ~7.4 min left)
+  48064/55448 images  (24 img/s, ~5.2 min left)
+  51264/55448 images  (23 img/s, ~3.0 min left)
+  54464/55448 images  (23 img/s, ~0.7 min left)
+  55448/55448 images  (23 img/s, ~0.0 min left)
+Epoch 1/60
+304/304 - 8s - 25ms/step - accuracy: 0.7444 - loss: 0.9235 - val_accuracy: 0.9238 - val_loss: 0.2474 - learning_rate: 0.0010
+Epoch 2/60
+304/304 - 4s - 13ms/step - accuracy: 0.8814 - loss: 0.3673 - val_accuracy: 0.9362 - val_loss: 0.1996 - learning_rate: 0.0010
+Epoch 3/60
+304/304 - 5s - 15ms/step - accuracy: 0.9013 - loss: 0.2949 - val_accuracy: 0.9478 - val_loss: 0.1634 - learning_rate: 0.0010
+Epoch 4/60
+304/304 - 6s - 21ms/step - accuracy: 0.9145 - loss: 0.2590 - val_accuracy: 0.9497 - val_loss: 0.1566 - learning_rate: 0.0010
+Epoch 5/60
+304/304 - 6s - 19ms/step - accuracy: 0.9210 - loss: 0.2273 - val_accuracy: 0.9555 - val_loss: 0.1387 - learning_rate: 0.0010
+Epoch 6/60
+304/304 - 4s - 13ms/step - accuracy: 0.9270 - loss: 0.2059 - val_accuracy: 0.9574 - val_loss: 0.1313 - learning_rate: 0.0010
+Epoch 7/60
+304/304 - 5s - 16ms/step - accuracy: 0.9322 - loss: 0.1957 - val_accuracy: 0.9576 - val_loss: 0.1294 - learning_rate: 0.0010
+Epoch 8/60
+304/304 - 5s - 16ms/step - accuracy: 0.9325 - loss: 0.1904 - val_accuracy: 0.9579 - val_loss: 0.1325 - learning_rate: 0.0010
+Epoch 9/60
+304/304 - 7s - 25ms/step - accuracy: 0.9367 - loss: 0.1752 - val_accuracy: 0.9546 - val_loss: 0.1409 - learning_rate: 0.0010
+Epoch 10/60
+304/304 - 7s - 22ms/step - accuracy: 0.9371 - loss: 0.1745 - val_accuracy: 0.9595 - val_loss: 0.1254 - learning_rate: 0.0010
+Epoch 11/60
+304/304 - 6s - 21ms/step - accuracy: 0.9424 - loss: 0.1615 - val_accuracy: 0.9567 - val_loss: 0.1314 - learning_rate: 0.0010
+Epoch 12/60
+304/304 - 5s - 16ms/step - accuracy: 0.9452 - loss: 0.1557 - val_accuracy: 0.9626 - val_loss: 0.1154 - learning_rate: 0.0010
+Epoch 13/60
+304/304 - 4s - 15ms/step - accuracy: 0.9447 - loss: 0.1501 - val_accuracy: 0.9650 - val_loss: 0.1121 - learning_rate: 0.0010
+Epoch 14/60
+304/304 - 5s - 16ms/step - accuracy: 0.9474 - loss: 0.1475 - val_accuracy: 0.9653 - val_loss: 0.1051 - learning_rate: 0.0010
+Epoch 15/60
+304/304 - 5s - 15ms/step - accuracy: 0.9482 - loss: 0.1408 - val_accuracy: 0.9660 - val_loss: 0.1087 - learning_rate: 0.0010
+Epoch 16/60
+304/304 - 5s - 16ms/step - accuracy: 0.9490 - loss: 0.1394 - val_accuracy: 0.9667 - val_loss: 0.1033 - learning_rate: 0.0010
+Epoch 17/60
+304/304 - 5s - 15ms/step - accuracy: 0.9525 - loss: 0.1297 - val_accuracy: 0.9628 - val_loss: 0.1125 - learning_rate: 0.0010
+Epoch 18/60
+304/304 - 5s - 17ms/step - accuracy: 0.9543 - loss: 0.1241 - val_accuracy: 0.9614 - val_loss: 0.1208 - learning_rate: 0.0010
+Epoch 19/60
+304/304 - 5s - 16ms/step - accuracy: 0.9490 - loss: 0.1311 - val_accuracy: 0.9653 - val_loss: 0.1051 - learning_rate: 0.0010
+Epoch 20/60
+304/304 - 5s - 16ms/step - accuracy: 0.9580 - loss: 0.1100 - val_accuracy: 0.9710 - val_loss: 0.0925 - learning_rate: 5.0000e-04
+Epoch 21/60
+304/304 - 5s - 16ms/step - accuracy: 0.9603 - loss: 0.1043 - val_accuracy: 0.9684 - val_loss: 0.0984 - learning_rate: 5.0000e-04
+Epoch 22/60
+304/304 - 5s - 15ms/step - accuracy: 0.9630 - loss: 0.0977 - val_accuracy: 0.9686 - val_loss: 0.0979 - learning_rate: 5.0000e-04
+Epoch 23/60
+304/304 - 5s - 16ms/step - accuracy: 0.9626 - loss: 0.0993 - val_accuracy: 0.9612 - val_loss: 0.1159 - learning_rate: 5.0000e-04
+Epoch 24/60
+304/304 - 4s - 12ms/step - accuracy: 0.9641 - loss: 0.0906 - val_accuracy: 0.9710 - val_loss: 0.0885 - learning_rate: 2.5000e-04
+Epoch 25/60
+304/304 - 4s - 15ms/step - accuracy: 0.9664 - loss: 0.0861 - val_accuracy: 0.9707 - val_loss: 0.0900 - learning_rate: 2.5000e-04
+Epoch 26/60
+304/304 - 4s - 13ms/step - accuracy: 0.9683 - loss: 0.0803 - val_accuracy: 0.9709 - val_loss: 0.0874 - learning_rate: 2.5000e-04
+Epoch 27/60
+304/304 - 4s - 13ms/step - accuracy: 0.9692 - loss: 0.0803 - val_accuracy: 0.9704 - val_loss: 0.0896 - learning_rate: 2.5000e-04
+Epoch 28/60
+304/304 - 3s - 11ms/step - accuracy: 0.9707 - loss: 0.0777 - val_accuracy: 0.9715 - val_loss: 0.0852 - learning_rate: 2.5000e-04
+Epoch 29/60
+304/304 - 4s - 12ms/step - accuracy: 0.9704 - loss: 0.0774 - val_accuracy: 0.9737 - val_loss: 0.0841 - learning_rate: 2.5000e-04
+Epoch 30/60
+304/304 - 4s - 14ms/step - accuracy: 0.9695 - loss: 0.0772 - val_accuracy: 0.9721 - val_loss: 0.0866 - learning_rate: 2.5000e-04
+Epoch 31/60
+304/304 - 4s - 15ms/step - accuracy: 0.9701 - loss: 0.0773 - val_accuracy: 0.9737 - val_loss: 0.0861 - learning_rate: 2.5000e-04
+Epoch 32/60
+304/304 - 4s - 14ms/step - accuracy: 0.9701 - loss: 0.0751 - val_accuracy: 0.9726 - val_loss: 0.0858 - learning_rate: 2.5000e-04
+Epoch 33/60
+304/304 - 5s - 17ms/step - accuracy: 0.9714 - loss: 0.0743 - val_accuracy: 0.9737 - val_loss: 0.0820 - learning_rate: 1.2500e-04
+Epoch 34/60
+304/304 - 4s - 14ms/step - accuracy: 0.9728 - loss: 0.0701 - val_accuracy: 0.9727 - val_loss: 0.0822 - learning_rate: 1.2500e-04
+Epoch 35/60
+304/304 - 5s - 17ms/step - accuracy: 0.9744 - loss: 0.0683 - val_accuracy: 0.9740 - val_loss: 0.0837 - learning_rate: 1.2500e-04
+Epoch 36/60
+304/304 - 6s - 20ms/step - accuracy: 0.9716 - loss: 0.0699 - val_accuracy: 0.9722 - val_loss: 0.0834 - learning_rate: 1.2500e-04
+Epoch 37/60
+304/304 - 7s - 21ms/step - accuracy: 0.9734 - loss: 0.0684 - val_accuracy: 0.9744 - val_loss: 0.0813 - learning_rate: 6.2500e-05
+Epoch 38/60
+304/304 - 8s - 25ms/step - accuracy: 0.9741 - loss: 0.0649 - val_accuracy: 0.9731 - val_loss: 0.0812 - learning_rate: 6.2500e-05
+Epoch 39/60
+304/304 - 9s - 28ms/step - accuracy: 0.9743 - loss: 0.0661 - val_accuracy: 0.9737 - val_loss: 0.0811 - learning_rate: 6.2500e-05
+Epoch 40/60
+304/304 - 6s - 19ms/step - accuracy: 0.9753 - loss: 0.0624 - val_accuracy: 0.9740 - val_loss: 0.0816 - learning_rate: 6.2500e-05
+Epoch 41/60
+304/304 - 10s - 34ms/step - accuracy: 0.9749 - loss: 0.0637 - val_accuracy: 0.9745 - val_loss: 0.0809 - learning_rate: 6.2500e-05
+Epoch 42/60
+304/304 - 6s - 20ms/step - accuracy: 0.9746 - loss: 0.0625 - val_accuracy: 0.9739 - val_loss: 0.0798 - learning_rate: 6.2500e-05
+Epoch 43/60
+304/304 - 5s - 16ms/step - accuracy: 0.9752 - loss: 0.0621 - val_accuracy: 0.9741 - val_loss: 0.0798 - learning_rate: 6.2500e-05
+Epoch 44/60
+304/304 - 7s - 22ms/step - accuracy: 0.9761 - loss: 0.0625 - val_accuracy: 0.9750 - val_loss: 0.0801 - learning_rate: 6.2500e-05
+Epoch 45/60
+304/304 - 6s - 21ms/step - accuracy: 0.9765 - loss: 0.0609 - val_accuracy: 0.9738 - val_loss: 0.0813 - learning_rate: 6.2500e-05
+Epoch 46/60
+304/304 - 5s - 17ms/step - accuracy: 0.9745 - loss: 0.0629 - val_accuracy: 0.9744 - val_loss: 0.0805 - learning_rate: 3.1250e-05
+Epoch 47/60
+304/304 - 5s - 17ms/step - accuracy: 0.9759 - loss: 0.0630 - val_accuracy: 0.9745 - val_loss: 0.0807 - learning_rate: 3.1250e-05
+Epoch 48/60
+304/304 - 5s - 16ms/step - accuracy: 0.9766 - loss: 0.0590 - val_accuracy: 0.9746 - val_loss: 0.0798 - learning_rate: 3.1250e-05
+Epoch 49/60
+304/304 - 5s - 15ms/step - accuracy: 0.9756 - loss: 0.0618 - val_accuracy: 0.9738 - val_loss: 0.0800 - learning_rate: 1.5625e-05
+Epoch 50/60
+304/304 - 4s - 15ms/step - accuracy: 0.9766 - loss: 0.0603 - val_accuracy: 0.9739 - val_loss: 0.0804 - learning_rate: 1.5625e-05
+Epoch 51/60
+304/304 - 4s - 14ms/step - accuracy: 0.9761 - loss: 0.0601 - val_accuracy: 0.9741 - val_loss: 0.0802 - learning_rate: 1.5625e-05
+Epoch 52/60
+304/304 - 5s - 17ms/step - accuracy: 0.9761 - loss: 0.0601 - val_accuracy: 0.9746 - val_loss: 0.0800 - learning_rate: 7.8125e-06
+                                  precision    recall  f1-score   support
+
+               Apple: Apple scab      0.968     0.957     0.963        94
+                Apple: Black rot      0.979     1.000     0.989        93
+         Apple: Cedar apple rust      1.000     0.976     0.988        41
+                  Apple: healthy      0.988     0.992     0.990       247
+       Background without leaves      0.994     0.988     0.991       171
+              Blueberry: healthy      0.987     0.991     0.989       226
+          Cherry: Powdery mildew      1.000     0.994     0.997       158
+                 Cherry: healthy      1.000     0.984     0.992       128
+Corn: Cercospora leaf spot Gray       0.900     0.818     0.857        77
+               Corn: Common rust      1.000     0.994     0.997       179
+      Corn: Northern Leaf Blight      0.903     0.946     0.924       147
+                   Corn: healthy      0.994     1.000     0.997       174
+                Grape: Black rot      0.966     0.966     0.966       177
+     Grape: Esca (Black Measles)      0.971     0.971     0.971       207
+Grape: Leaf blight (Isariopsis L      1.000     1.000     1.000       161
+                  Grape: healthy      1.000     1.000     1.000        63
+Orange: Haunglongbing (Citrus gr      0.999     0.999     0.999       826
+           Peach: Bacterial spot      0.994     0.986     0.990       345
+                  Peach: healthy      0.947     1.000     0.973        54
+          Pepper: Bacterial spot      0.953     0.960     0.957       149
+                 Pepper: healthy      0.960     0.982     0.971       222
+            Potato: Early blight      0.993     0.980     0.987       150
+             Potato: Late blight      0.953     0.953     0.953       150
+                 Potato: healthy      0.920     1.000     0.958        23
+              Raspberry: healthy      1.000     0.982     0.991        55
+                Soybean: healthy      0.999     0.990     0.994       764
+          Squash: Powdery mildew      0.993     0.996     0.995       276
+         Strawberry: Leaf scorch      1.000     1.000     1.000       166
+             Strawberry: healthy      0.971     1.000     0.986        68
+          Tomato: Bacterial spot      0.912     0.972     0.941       319
+            Tomato: Early blight      0.866     0.820     0.842       150
+             Tomato: Late blight      0.938     0.944     0.941       287
+               Tomato: Leaf Mold      0.935     0.909     0.922       143
+      Tomato: Septoria leaf spot      0.940     0.891     0.915       266
+Tomato: Spider mites Two-spotted      0.927     0.913     0.920       252
+             Tomato: Target Spot      0.867     0.867     0.867       211
+Tomato: Tomato Yellow Leaf Curl       0.989     0.991     0.990       804
+     Tomato: Tomato mosaic virus      0.881     0.929     0.904        56
+                 Tomato: healthy      0.950     0.962     0.956       239
+
+                        accuracy                          0.970      8318
+                       macro avg      0.963     0.964     0.963      8318
+                    weighted avg      0.970     0.970     0.970      8318
+
+TEST accuracy=0.9701  top-3=0.9982
+saved model to C:\Users\LENOVO\Downloads\KrishiRakshak\ml\model

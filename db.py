@@ -4,8 +4,7 @@ import sqlite3
 
 from flask import g
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "krishirakshak.db")
+from paths import DB_PATH  # noqa: E402  (/tmp copy on Vercel)
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS users (

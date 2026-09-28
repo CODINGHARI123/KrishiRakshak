@@ -93,7 +93,7 @@
 <div class="card">
   <h2>{{ t('farm.reports') }}</h2>
   {% for x in reports %}
-    <div class="alert-item"><img class="thumb" src="{{ url_for('static', filename=x.image_path) }}" alt="">
+    <div class="alert-item"><img class="thumb" src="{{ img_url(x.image_path) }}" alt="">
       <div><a href="{{ url_for('report_view', rid=x.id) }}">{{ label_name(x.final_label or x.ai_label) }}</a><br><small>{{ x.created_at[:10] }}</small> {{ m.status_badge(x.status) }}</div></div>
   {% else %}<p class="muted">{{ t('farmer.no_reports') }}</p>{% endfor %}
 </div>

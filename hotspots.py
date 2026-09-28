@@ -9,12 +9,39 @@ radius, case count and 7-day growth.
 import datetime as dt
 
 import numpy as np
-from sklearn.cluster import DBSCAN
 
 from kb import DISEASES
 from risk import haversine_km
 
 EARTH_KM = 6371.0
+
+
+def dbscan_haversine(latlon_deg, eps_km, min_samples):
+    """Minimal DBSCAN (Ester et al., 1996) on great-circle distance; returns labels (-1 = noise).
+    Pure NumPy so the deployed app does not need scikit-learn."""
+    p = np.radians(np.asarray(latlon_deg, dtype=float))
+    lat, lon = p[:, 0:1], p[:, 1:2]
+    a = np.sin((lat - lat.T) / 2) ** 2 + np.cos(lat) * np.cos(lat.T) * np.sin((lon - lon.T) / 2) ** 2
+    dist = 2 * EARTH_KM * np.arcsin(np.sqrt(np.clip(a, 0, 1)))
+    neigh = [np.flatnonzero(row <= eps_km) for row in dist]
+    core = np.array([len(n) >= min_samples for n in neigh])
+    labels = np.full(len(p), -1)
+    cid = 0
+    for i in range(len(p)):
+        if labels[i] != -1 or not core[i]:
+            continue
+        labels[i] = cid
+        stack = [i]
+        while stack:
+            j = stack.pop()
+            if not core[j]:
+                continue
+            for k in neigh[j]:
+                if labels[k] == -1:
+                    labels[k] = cid
+                    stack.append(k)
+        cid += 1
+    return labels
 
 
 def find_hotspots(rows, eps_km=5.0, min_cases=3):
@@ -32,10 +59,9 @@ def find_hotspots(rows, eps_km=5.0, min_cases=3):
     for lab, items in groups.items():
         if len(items) < min_cases:
             continue
-        coords = np.radians([[i["lat"], i["lon"]] for i in items])
-        cl = DBSCAN(eps=eps_km / EARTH_KM, min_samples=min_cases, metric="haversine").fit(coords)
-        for c in set(cl.labels_) - {-1}:
-            members = [items[k] for k in range(len(items)) if cl.labels_[k] == c]
+        labels = dbscan_haversine([[i["lat"], i["lon"]] for i in items], eps_km, min_cases)
+        for c in set(labels.tolist()) - {-1}:
+            members = [items[k] for k in range(len(items)) if labels[k] == c]
             lat = float(np.mean([m["lat"] for m in members]))
             lon = float(np.mean([m["lon"] for m in members]))
             radius = max(1.0, max(haversine_km(lat, lon, m["lat"], m["lon"]) for m in members))

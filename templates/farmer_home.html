@@ -81,7 +81,7 @@
       <div class="row between"><h2 style="margin:0">{{ t('farmer.recent') }}</h2><a href="{{ url_for('reports_list') }}">{{ t('common.view_all') }}</a></div>
       {% for r in reports %}
         <div class="alert-item">
-          <img class="thumb" src="{{ url_for('static', filename=r.image_path) }}" alt="">
+          <img class="thumb" src="{{ img_url(r.image_path) }}" alt="">
           <div>
             <a href="{{ url_for('report_view', rid=r.id) }}">{{ label_name(r.final_label or r.ai_label) }}</a><br>
             <small>{{ r.created_at[:10] }}</small> {{ m.status_badge(r.status) }}

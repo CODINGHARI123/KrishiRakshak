@@ -25,15 +25,16 @@ import ml_service
 import risk
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_DIR = os.path.join(BASE, "static", "uploads")
-EMB_DIR = os.path.join(BASE, "ml", "embeddings")
+from paths import BUNDLED_UPLOADS, EMB_DIR, IS_SERVERLESS, SECRET_FILE, UPLOAD_DIR  # noqa: E402
+
 PLOT_DIR = os.path.join(BASE, "ml", "plots")
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-os.makedirs(EMB_DIR, exist_ok=True)
 
 
 def _secret():
-    p = os.path.join(BASE, ".secret_key")
+    # On Vercel set KRISHI_SECRET_KEY so every instance shares the same session key.
+    if os.environ.get("KRISHI_SECRET_KEY"):
+        return os.environ["KRISHI_SECRET_KEY"]
+    p = SECRET_FILE
     if not os.path.exists(p):
         with open(p, "w") as f:
             f.write(secrets.token_hex(32))
@@ -87,7 +88,7 @@ def inject():
     if g.get("user"):
         unread = db.query("SELECT COUNT(*) c FROM alerts WHERE user_id=? AND is_read=0",
                           (g.user["id"],), one=True)["c"]
-    return dict(t=T, lang=g.lang, LANGS=kb.LANGS, user=g.get("user"), unread=unread,
+    return dict(t=T, lang=g.lang, img_url=lambda p: url_for("media", name=os.path.basename(p or "")), LANGS=kb.LANGS, user=g.get("user"), unread=unread,
                 label_name=label_name, crop_name=lambda c: kb.crop_name(c, g.lang), risk_name=risk_name,
                 CROPS=kb.CROPS, PESTS=kb.PESTS, DISEASES=kb.DISEASES, speech_lang=kb.SPEECH_LANG[g.lang],
                 today=dt.date.today().isoformat())
@@ -735,6 +736,16 @@ def _record_version(res):
     conn.close()
 
 
+@app.route("/media/<name>")
+def media(name):
+    """Report photos: new uploads (writable dir) first, then the bundled demo photos."""
+    name = os.path.basename(name)
+    for d in (UPLOAD_DIR, BUNDLED_UPLOADS):
+        if os.path.exists(os.path.join(d, name)):
+            return send_from_directory(d, name, max_age=86400)
+    abort(404)
+
+
 @app.route("/ml-plots/<name>")
 @login_required()
 def ml_plot(name):
@@ -890,7 +901,8 @@ def e404(_):
 
 
 if __name__ == "__main__":
-    threading.Thread(target=_scheduler, daemon=True).start()
+    if not IS_SERVERLESS:
+        threading.Thread(target=_scheduler, daemon=True).start()
     if ml_service.available():   # warm up the model so the first diagnosis is fast
         threading.Thread(target=ml_service.load, daemon=True).start()
     print("KrishiRakshak running at http://localhost:5000")

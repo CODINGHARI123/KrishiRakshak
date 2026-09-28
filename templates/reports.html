@@ -8,7 +8,7 @@
     <tr><th></th><th>#</th><th>{{ t('common.date') }}</th>{% if user.role != 'farmer' %}<th>{{ t('common.farmer') }}</th><th>{{ t('form.district') }}</th>{% endif %}<th>{{ t('report.diagnosis') }}</th><th>AI %</th><th>{{ t('common.status') }}</th></tr>
     {% for r in rows %}
     <tr>
-      <td><img class="thumb" src="{{ url_for('static', filename=r.image_path) }}" alt="" loading="lazy"></td>
+      <td><img class="thumb" src="{{ img_url(r.image_path) }}" alt="" loading="lazy"></td>
       <td><a href="{{ url_for('officer_review', rid=r.id) if user.role != 'farmer' else url_for('report_view', rid=r.id) }}">{{ r.id }}</a></td>
       <td>{{ r.created_at[:10] }}</td>
       {% if user.role != 'farmer' %}<td>{{ r.farmer_name or '' }}</td><td>{{ r.district or '' }}</td>{% endif %}

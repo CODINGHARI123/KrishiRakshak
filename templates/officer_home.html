@@ -20,7 +20,7 @@
       {% for r in rows %}
       {% set p = priority(r) %}
       <tr>
-        <td><img class="thumb" src="{{ url_for('static', filename=r.image_path) }}" alt="" loading="lazy"></td>
+        <td><img class="thumb" src="{{ img_url(r.image_path) }}" alt="" loading="lazy"></td>
         <td>
           <a href="{{ url_for('officer_review', rid=r.id) }}"><b>{{ label_name(r.final_label or r.ai_label) }}</b></a><br>
           <small>#{{ r.id }} · {{ r.farmer_name or '' }}</small>

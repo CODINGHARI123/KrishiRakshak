@@ -6,7 +6,7 @@
 <div class="split">
   <div class="card">
     <div class="result-head">
-      <a href="{{ url_for('static', filename=r.image_path) }}" target="_blank"><img src="{{ url_for('static', filename=r.image_path) }}" alt=""></a>
+      <a href="{{ img_url(r.image_path) }}" target="_blank"><img src="{{ img_url(r.image_path) }}" alt=""></a>
       <div>
         <div class="row between"><span class="muted">#{{ r.id }} · {{ r.created_at[:16] }}</span>{{ m.status_badge(r.status) }}</div>
         <h2 style="margin:6px 0">{{ label_name(r.final_label or r.ai_label) }}</h2>

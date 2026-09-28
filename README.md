@@ -171,8 +171,9 @@ Risk = 85 × Weather favourability × Crop-stage factor × Variety resistance ×
 | **Charts** | Chart.js | Dashboard and weather charts |
 | **Voice** | Web Speech API (built into Chrome) | Reads advice aloud for farmers |
 | **Back-end** | Python 3.12, Flask 3 | Lightweight web server; works directly with the AI model |
-| **Deep learning** | TensorFlow 2.18 / Keras, MobileNetV2 | Accurate and light enough for a normal laptop CPU |
-| **ML tools** | scikit-learn, NumPy, Pillow, Matplotlib | DBSCAN clustering, metrics, image processing, graphs |
+| **Deep learning** | TensorFlow 2.18 / Keras, MobileNetV2 | Training: accurate and light enough for a normal laptop CPU |
+| **Inference** | ONNX Runtime + NumPy | Runs the trained model without TensorFlow, so the site fits on Vercel |
+| **ML tools** | NumPy, Pillow (scikit-learn, Matplotlib for training) | DBSCAN clustering, image processing, metrics, graphs |
 | **Database** | SQLite | No installation or setup needed |
 | **Weather** | Open-Meteo API | Free live weather forecast, no API key |
 | **Dataset** | PlantVillage (54,305 leaf images + 1,143 background images) | Standard benchmark for plant-disease AI |
@@ -241,10 +242,21 @@ Change the language from the dropdown at the top right: **English / हिन्
 
 Download the dataset from [Mendeley Data – Plant leaf diseases dataset (without augmentation)](https://data.mendeley.com/datasets/tywbtsjrjv/1), then:
 ```bash
-# 1. Unzip it and rename the folder to ml/data/plantvillage/  (39 class sub-folders)
-python ml/train.py        # trains the model (~50 min on CPU)
-python seed.py            # recreates the demo database
+pip install -r requirements-train.txt   # TensorFlow, scikit-learn, etc. (training tools)
+# Unzip the dataset and rename the folder to ml/data/plantvillage/  (39 class sub-folders)
+python ml/train.py         # trains the model (~50 min on CPU)
+python ml/export_onnx.py   # exports the lightweight ONNX model the website uses
+python seed.py             # recreates the demo database
 ```
+Retraining from the **AI model** page also needs `requirements-train.txt`; it works only on your own computer, not on Vercel.
+
+### Deploy on Vercel
+The website is light enough for Vercel (~150 MB bundle). It uses the **ONNX** version of the model (`onnxruntime`), not TensorFlow.
+1. Import the GitHub repo in Vercel. The framework is detected as **Flask** automatically (`app.py`).
+2. In **Settings → Environment Variables**, add `KRISHI_SECRET_KEY` = any long random text. This keeps logins working across Vercel instances.
+3. Deploy.
+
+On Vercel the demo database is copied to temporary storage when the app starts. **New farms and reports reset whenever Vercel restarts the app**, but the demo data always comes back. The 6-hourly background scan does not run there; risk alerts are still created when farmers open their home page. For permanent data, run it on your own computer or a server.
 
 ### Optional: Simulate an IoT trap / weather station
 ```bash

@@ -1,0 +1,12 @@
+# Keep the Vercel function small: only what the website needs at runtime
+docs/
+ml/data/
+ml/features.npz
+ml/*.keras
+ml/model/*.keras
+ml/embeddings/
+ml/feedback/
+ml/train_log.txt
+i18n/build_i18n.py
+.secret_key
+__pycache__/

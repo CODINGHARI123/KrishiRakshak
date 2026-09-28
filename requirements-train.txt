@@ -1,0 +1,10 @@
+# Extra tools for training / retraining the model and building the docs (local only)
+-r requirements.txt
+tensorflow==2.18.*
+scikit-learn
+matplotlib
+tf2onnx
+python-pptx
+python-docx
+pymupdf
+selenium

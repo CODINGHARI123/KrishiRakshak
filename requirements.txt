@@ -1,6 +1,5 @@
+# Runtime dependencies of the website (also what Vercel installs)
 flask>=3.0
-tensorflow==2.18.*
-numpy
-pillow
-scikit-learn
-matplotlib
+numpy>=1.26
+pillow>=10.0
+onnxruntime>=1.18

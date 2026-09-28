@@ -1,25 +1,28 @@
 """
 Inference + continual learning for the crop disease classifier.
 
-The model is MobileNetV2 (frozen backbone) + a small dense head.  Keeping the two
-apart means a new head can be trained from expert-confirmed field images in
-seconds (retrain) without touching the backbone.
+The model is MobileNetV2 (frozen backbone) + a small dense head.
+* Inference uses the ONNX export of the backbone (onnxruntime) and the head's
+  weights in NumPy – no TensorFlow needed, so the app fits on Vercel.
+* Retraining (local only) uses TensorFlow: a new head is trained from
+  expert-confirmed field images in seconds without touching the backbone.
+Run `python ml/export_onnx.py` after `ml/train.py` to create the ONNX/NumPy files.
 """
 import json
 import os
+import re
 import threading
 import time
 
 import numpy as np
 from PIL import Image, ImageOps
 
-BASE = os.path.dirname(os.path.abspath(__file__))
-MODEL_DIR = os.path.join(BASE, "ml", "model")
-FEEDBACK_DIR = os.path.join(BASE, "ml", "feedback")
-FEATURES = os.path.join(BASE, "ml", "features.npz")
-IMG_SIZE = 224
+from paths import BASE, FEEDBACK_DIR
 
-os.makedirs(FEEDBACK_DIR, exist_ok=True)
+MODEL_DIR = os.path.join(BASE, "ml", "model")
+FEATURES = os.path.join(BASE, "ml", "features.npz")
+BACKBONE_ONNX = os.path.join(MODEL_DIR, "backbone.onnx")
+IMG_SIZE = 224
 
 _lock = threading.Lock()
 _state = {"backbone": None, "head": None, "labels": None, "version": None}
@@ -27,7 +30,7 @@ retrain_status = {"running": False, "message": "", "last": None}
 
 
 def available():
-    return os.path.exists(os.path.join(MODEL_DIR, "krishi_model.keras"))
+    return os.path.exists(BACKBONE_ONNX) and os.path.exists(os.path.join(MODEL_DIR, "labels.json"))
 
 
 def _tf():
@@ -44,20 +47,54 @@ def active_version():
     return 1
 
 
+def head_versions():
+    return sorted(int(m.group(1)) for f in os.listdir(MODEL_DIR) if (m := re.match(r"head_v(\d+)\.(keras|npz)$", f)))
+
+
+class NumpyHead:
+    """Dense(256, ReLU) -> Dense(n, softmax); dropout is inactive at inference."""
+
+    def __init__(self, path):
+        w = np.load(path)
+        self.w1, self.b1, self.w2, self.b2 = w["w1"], w["b1"], w["w2"], w["b2"]
+
+    def __call__(self, feats):
+        h = np.maximum(feats @ self.w1 + self.b1, 0)
+        z = h @ self.w2 + self.b2
+        z = np.exp(z - z.max(axis=1, keepdims=True))
+        return z / z.sum(axis=1, keepdims=True)
+
+
+class OnnxBackbone:
+    def __init__(self, path):
+        import onnxruntime as ort
+        opts = ort.SessionOptions()
+        opts.intra_op_num_threads = 2
+        self.sess = ort.InferenceSession(path, opts, providers=["CPUExecutionProvider"])
+        self.inp = self.sess.get_inputs()[0].name
+
+    def __call__(self, x):
+        return self.sess.run(None, {self.inp: x.astype(np.float32)})[0]
+
+
 def load(force=False):
     with _lock:
         if _state["backbone"] is not None and not force:
             return _state
-        tf = _tf()
         if _state["backbone"] is None:
-            full = tf.keras.models.load_model(os.path.join(MODEL_DIR, "krishi_model.keras"), compile=False)
-            _state["backbone"] = next(l for l in full.layers if "mobilenet" in l.name.lower())
+            _state["backbone"] = OnnxBackbone(BACKBONE_ONNX)
         v = active_version()
-        _state["head"] = tf.keras.models.load_model(os.path.join(MODEL_DIR, f"head_v{v}.keras"), compile=False)
+        _state["head"] = NumpyHead(os.path.join(MODEL_DIR, f"head_v{v}.npz"))
         _state["version"] = v
         with open(os.path.join(MODEL_DIR, "labels.json")) as f:
             _state["labels"] = json.load(f)
         return _state
+
+
+def save_head_npz(keras_head, path):
+    dense = [l for l in keras_head.layers if l.__class__.__name__ == "Dense"]
+    (w1, b1), (w2, b2) = dense[0].get_weights(), dense[1].get_weights()
+    np.savez(path, w1=w1, b1=b1, w2=w2, b2=b2)
 
 
 def _prep(img):
@@ -84,7 +121,7 @@ def quality_check(img):
 def embed(img):
     st = load()
     x = _prep(img)[None]
-    return st["backbone"](x, training=False).numpy()[0]
+    return st["backbone"](x)[0]
 
 
 def predict(img, crop=None):
@@ -95,7 +132,7 @@ def predict(img, crop=None):
     """
     st = load()
     feat = embed(img)
-    probs = st["head"](feat[None], training=False).numpy()[0]
+    probs = st["head"](feat[None])[0]
     labels = st["labels"]
     raw_top = int(probs.argmax())
     p = probs.copy()
@@ -146,9 +183,10 @@ def retrain(on_done=None):
     """
     if retrain_status["running"]:
         return False
-    if not os.path.exists(FEATURES):
-        retrain_status["message"] = ("Retraining needs ml/features.npz (not stored in git because it is 189 MB). "
-                                     "Run: python ml/train.py")
+    import importlib.util
+    if importlib.util.find_spec("tensorflow") is None or not os.path.exists(FEATURES) or not os.path.exists(os.path.join(MODEL_DIR, f"head_v{active_version()}.keras")):
+        retrain_status["message"] = ("Retraining runs only on the local copy with TensorFlow and ml/features.npz "
+                                     "(not in git / not on Vercel). Run: python ml/train.py")
         return False
 
     def job():
@@ -157,6 +195,7 @@ def retrain(on_done=None):
             tf = _tf()
             st = load()
             labels = st["labels"]
+            cur_head = tf.keras.models.load_model(os.path.join(MODEL_DIR, f"head_v{st['version']}.keras"), compile=False)
             data = np.load(FEATURES)
             X, y = data["X"], data["y"]
             tr, te = data["train"], data["test"]
@@ -165,10 +204,10 @@ def retrain(on_done=None):
             fx = np.array([np.load(p) for p, l in items if l in idx], dtype=np.float32).reshape(-1, X.shape[1])
             fy = np.array([idx[l] for p, l in items if l in idx], dtype=np.int64)
 
-            old_acc = float((st["head"](X[te], training=False).numpy().argmax(1) == y[te]).mean())
+            old_acc = float((st["head"](X[te]).argmax(1) == y[te]).mean())
             retrain_status["message"] = f"Training on {len(tr)} + {len(fy)} field images…"
-            head = tf.keras.models.clone_model(st["head"])
-            head.set_weights(st["head"].get_weights())
+            head = tf.keras.models.clone_model(cur_head)
+            head.set_weights(cur_head.get_weights())
             head.compile(optimizer=tf.keras.optimizers.Adam(2e-4),
                          loss="sparse_categorical_crossentropy", metrics=["accuracy"])
             Xt = np.concatenate([X[tr], fx]) if len(fy) else X[tr]
@@ -178,8 +217,9 @@ def retrain(on_done=None):
 
             new_acc = float((head(X[te], training=False).numpy().argmax(1) == y[te]).mean())
             fb_acc = float((head(fx, training=False).numpy().argmax(1) == fy).mean()) if len(fy) else None
-            new_v = max(int(f[6:-6]) for f in os.listdir(MODEL_DIR) if f.startswith("head_v")) + 1
+            new_v = max(head_versions()) + 1
             head.save(os.path.join(MODEL_DIR, f"head_v{new_v}.keras"))
+            save_head_npz(head, os.path.join(MODEL_DIR, f"head_v{new_v}.npz"))
             accepted = new_acc >= old_acc - 0.005
             if accepted:
                 with open(os.path.join(MODEL_DIR, "active.json"), "w") as f:

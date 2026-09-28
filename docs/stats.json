@@ -1,0 +1,351 @@
+{
+ "confidence": [
+  0,
+  0,
+  0,
+  1,
+  1,
+  5,
+  8,
+  9,
+  11,
+  387
+ ],
+ "districts": [
+  {
+   "district": "Pune",
+   "n": 60
+  },
+  {
+   "district": "Nashik",
+   "n": 47
+  },
+  {
+   "district": "Nagpur",
+   "n": 31
+  },
+  {
+   "district": "Himachal (Shimla)",
+   "n": 28
+  },
+  {
+   "district": "Kolar",
+   "n": 28
+  },
+  {
+   "district": "Guntur",
+   "n": 28
+  },
+  {
+   "district": "Satara",
+   "n": 27
+  },
+  {
+   "district": "Kolhapur",
+   "n": 26
+  },
+  {
+   "district": "Ahmednagar",
+   "n": 25
+  },
+  {
+   "district": "Coimbatore",
+   "n": 21
+  },
+  {
+   "district": "Chikkaballapur",
+   "n": 16
+  },
+  {
+   "district": "Krishnagiri",
+   "n": 15
+  },
+  {
+   "district": "Jalgaon",
+   "n": 10
+  },
+  {
+   "district": "Amravati",
+   "n": 9
+  },
+  {
+   "district": "Chh. Sambhajinagar",
+   "n": 8
+  }
+ ],
+ "followups": {
+  "better": 206,
+  "due": 56,
+  "same": 80,
+  "worse": 54
+ },
+ "kpi": {
+  "agreement": 95.0,
+  "avg_response_h": 20.3,
+  "coverage": 82.9,
+  "diseased": 379,
+  "farms": 107,
+  "hotspots": 13,
+  "no_chem_pct": 37.4,
+  "pending": 9,
+  "referrals": 87,
+  "reports": 422,
+  "validated": 398
+ },
+ "top_diseases": [
+  {
+   "label": "Orange___Haunglongbing_(Citrus_greening)",
+   "n": 40,
+   "name": "Orange – Citrus greening (HLB)"
+  },
+  {
+   "label": "Corn___Northern_Leaf_Blight",
+   "n": 40,
+   "name": "Maize – Northern leaf blight"
+  },
+  {
+   "label": "Corn___Common_rust",
+   "n": 38,
+   "name": "Maize – Common rust"
+  },
+  {
+   "label": "Tomato___Late_blight",
+   "n": 29,
+   "name": "Tomato – Late blight"
+  },
+  {
+   "label": "Grape___Black_rot",
+   "n": 26,
+   "name": "Grape – Black rot"
+  },
+  {
+   "label": "Strawberry___Leaf_scorch",
+   "n": 25,
+   "name": "Strawberry – Leaf scorch"
+  },
+  {
+   "label": "Pepper,_bell___Bacterial_spot",
+   "n": 23,
+   "name": "Capsicum – Bacterial spot"
+  },
+  {
+   "label": "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+   "n": 18,
+   "name": "Tomato – Yellow leaf curl virus"
+  },
+  {
+   "label": "Corn___Cercospora_leaf_spot Gray_leaf_spot",
+   "n": 17,
+   "name": "Maize – Gray leaf spot"
+  },
+  {
+   "label": "Potato___Late_blight",
+   "n": 16,
+   "name": "Potato – Late blight"
+  }
+ ],
+ "traps": 960,
+ "weekly": [
+  {
+   "confirmed": 23,
+   "corrected": 1,
+   "pending": 0,
+   "rejected": 0,
+   "week": "2026-06-29"
+  },
+  {
+   "confirmed": 12,
+   "corrected": 2,
+   "pending": 0,
+   "rejected": 4,
+   "week": "2026-07-06"
+  },
+  {
+   "confirmed": 27,
+   "corrected": 1,
+   "pending": 0,
+   "rejected": 0,
+   "week": "2026-07-13"
+  },
+  {
+   "confirmed": 19,
+   "corrected": 1,
+   "pending": 0,
+   "rejected": 2,
+   "week": "2026-07-20"
+  },
+  {
+   "confirmed": 22,
+   "corrected": 1,
+   "pending": 0,
+   "rejected": 2,
+   "week": "2026-07-27"
+  },
+  {
+   "confirmed": 15,
+   "corrected": 1,
+   "pending": 0,
+   "rejected": 0,
+   "week": "2026-08-03"
+  },
+  {
+   "confirmed": 21,
+   "corrected": 2,
+   "pending": 0,
+   "rejected": 1,
+   "week": "2026-08-10"
+  },
+  {
+   "confirmed": 34,
+   "corrected": 0,
+   "pending": 0,
+   "rejected": 0,
+   "week": "2026-08-17"
+  },
+  {
+   "confirmed": 33,
+   "corrected": 1,
+   "pending": 0,
+   "rejected": 0,
+   "week": "2026-08-24"
+  },
+  {
+   "confirmed": 35,
+   "corrected": 2,
+   "pending": 0,
+   "rejected": 1,
+   "week": "2026-08-31"
+  },
+  {
+   "confirmed": 30,
+   "corrected": 2,
+   "pending": 0,
+   "rejected": 0,
+   "week": "2026-09-07"
+  },
+  {
+   "confirmed": 49,
+   "corrected": 2,
+   "pending": 0,
+   "rejected": 3,
+   "week": "2026-09-14"
+  },
+  {
+   "confirmed": 58,
+   "corrected": 4,
+   "pending": 9,
+   "rejected": 2,
+   "week": "2026-09-21"
+  }
+ ],
+ "farms": 107,
+ "reports": 425,
+ "feedback": 401,
+ "hotspots": 13,
+ "hotspot_list": [
+  {
+   "name": "Tomato – Late blight",
+   "cases": 24,
+   "radius_km": 5.0,
+   "districts": [
+    "Pune"
+   ]
+  },
+  {
+   "name": "Grape – Black rot",
+   "cases": 16,
+   "radius_km": 2.2,
+   "districts": [
+    "Nashik"
+   ]
+  },
+  {
+   "name": "Tomato – Yellow leaf curl virus",
+   "cases": 11,
+   "radius_km": 2.2,
+   "districts": [
+    "Ahmednagar"
+   ]
+  },
+  {
+   "name": "Maize – Common rust",
+   "cases": 11,
+   "radius_km": 2.1,
+   "districts": [
+    "Kolhapur"
+   ]
+  },
+  {
+   "name": "Capsicum – Bacterial spot",
+   "cases": 10,
+   "radius_km": 4.3,
+   "districts": [
+    "Guntur"
+   ]
+  },
+  {
+   "name": "Potato – Late blight",
+   "cases": 9,
+   "radius_km": 2.1,
+   "districts": [
+    "Pune"
+   ]
+  },
+  {
+   "name": "Orange – Citrus greening (HLB)",
+   "cases": 9,
+   "radius_km": 3.8,
+   "districts": [
+    "Nagpur"
+   ]
+  },
+  {
+   "name": "Apple – Apple scab",
+   "cases": 9,
+   "radius_km": 2.2,
+   "districts": [
+    "Himachal (Shimla)"
+   ]
+  },
+  {
+   "name": "Maize – Northern leaf blight",
+   "cases": 9,
+   "radius_km": 2.3,
+   "districts": [
+    "Coimbatore"
+   ]
+  },
+  {
+   "name": "Strawberry – Leaf scorch",
+   "cases": 8,
+   "radius_km": 2.2,
+   "districts": [
+    "Satara"
+   ]
+  },
+  {
+   "name": "Tomato – Early blight",
+   "cases": 7,
+   "radius_km": 2.1,
+   "districts": [
+    "Kolar"
+   ]
+  },
+  {
+   "name": "Orange – Citrus greening (HLB)",
+   "cases": 5,
+   "radius_km": 4.0,
+   "districts": [
+    "Nagpur"
+   ]
+  },
+  {
+   "name": "Maize – Northern leaf blight",
+   "cases": 3,
+   "radius_km": 2.0,
+   "districts": [
+    "Kolhapur"
+   ]
+  }
+ ]
+}

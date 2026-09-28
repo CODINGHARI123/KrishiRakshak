@@ -10,3 +10,6 @@ ml/train_log.txt
 i18n/build_i18n.py
 .secret_key
 __pycache__/
+.env*
+.vercel/
+.git/

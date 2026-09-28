@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as m with context %}
+{% block title %}{{ t('nav.home') }}{% endblock %}
+{% block content %}
+<div class="row between" style="margin-bottom:14px">
+  <div>
+    <h1 style="margin:0">{{ t('farmer.hello', name=user.name) }}</h1>
+    <span class="muted">{{ t('farmer.sub') }}</span>
+  </div>
+  <div class="row">
+    <a class="btn big" href="{{ url_for('diagnose') }}">📷 {{ t('nav.scan') }}</a>
+    <a class="btn secondary" href="{{ url_for('farm_new') }}">＋ {{ t('farm.add') }}</a>
+  </div>
+</div>
+
+{% if due %}
+<div class="notice blue">
+  <b>📅 {{ t('farmer.followups_due') }}</b>
+  <ul style="margin:6px 0 0;padding-left:20px">
+    {% for f in due %}<li><a href="{{ url_for('report_view', rid=f.report_id) }}">{{ label_name(f.label) }}</a> — {{ t('farmer.due_on') }} {{ f.due_date }}{% if f.due_date <= today %} <span class="badge lvl-high">{{ t('farmer.due_now') }}</span>{% endif %}</li>{% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<div class="split">
+  <div>
+    <h2>{{ t('farmer.my_farms') }}</h2>
+    {% if not cards %}
+      <div class="card"><p>{{ t('farmer.no_farms') }}</p><a class="btn" href="{{ url_for('farm_new') }}">＋ {{ t('farm.add') }}</a></div>
+    {% endif %}
+    {% for c in cards %}
+    <div class="card farm-card">
+      <div class="head">
+        <div>
+          <h3 style="margin:0"><a href="{{ url_for('farm_view', fid=c.farm.id) }}">{{ c.farm.name }}</a></h3>
+          <span class="muted">{{ crop_name(c.farm.crop) }}{% if c.farm.variety %} ({{ c.farm.variety }}){% endif %} · {{ c.farm.village or '' }} {{ c.farm.district or '' }}</span>
+        </div>
+        <span class="badge">{{ t('stage.' ~ c.stage) if c.stage else '' }}{% if c.das is not none %} · {{ c.das }} {{ t('farm.das') }}{% endif %}</span>
+      </div>
+      {% if c.today %}
+      <div class="wx">
+        <span>🌡 <b>{{ c.today.tmin }}–{{ c.today.tmax }}°C</b></span>
+        <span>💧 <b>{{ c.today.rh_mean }}%</b> RH</span>
+        <span>🌧 <b>{{ c.today.rain }} mm</b></span>
+        <span>🍃 <b>{{ c.today.wet_hours }} h</b> {{ t('wx.wet') }}</span>
+        {% if c.source != 'open-meteo' %}<span class="badge">{{ t('wx.offline') }}</span>{% endif %}
+      </div>
+      {% endif %}
+      <div class="muted" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.05em">{{ t('farmer.risk_7d') }}</div>
+      {% for r in c.risks %}
+        <div class="risk-line">
+          <span>{{ '🐛' if r.kind=='pest' else '🦠' }} {{ risk_name(r.key) }}</span>
+          {{ m.meter(r.score, r.level) }}
+          {{ m.level_badge(r.level) }}
+        </div>
+      {% else %}
+        <p class="muted">{{ t('farmer.no_risk') }}</p>
+      {% endfor %}
+      <div class="row" style="margin-top:10px">
+        <a class="btn small" href="{{ url_for('diagnose', farm=c.farm.id) }}">📷 {{ t('nav.scan') }}</a>
+        <a class="btn small secondary" href="{{ url_for('farm_view', fid=c.farm.id) }}#traps">🪤 {{ t('trap.log') }}</a>
+        <a class="btn small secondary" href="{{ url_for('farm_view', fid=c.farm.id) }}">{{ t('farm.details') }} →</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="row between"><h2 style="margin:0">🔔 {{ t('nav.alerts') }}</h2><a href="{{ url_for('alerts_page') }}">{{ t('common.view_all') }}</a></div>
+      {% for a in alerts %}
+        <div class="alert-item {{ 'unread' if not a.is_read }}">
+          {{ m.alert_icon(a.kind, a.level) }}
+          <div><div class="t">{% if a.link %}<a href="{{ a.link }}">{{ a.title }}</a>{% else %}{{ a.title }}{% endif %}</div><small>{{ a.body }}</small></div>
+        </div>
+      {% else %}
+        <p class="muted">{{ t('alerts.none') }}</p>
+      {% endfor %}
+    </div>
+    <div class="card">
+      <div class="row between"><h2 style="margin:0">{{ t('farmer.recent') }}</h2><a href="{{ url_for('reports_list') }}">{{ t('common.view_all') }}</a></div>
+      {% for r in reports %}
+        <div class="alert-item">
+          <img class="thumb" src="{{ url_for('static', filename=r.image_path) }}" alt="">
+          <div>
+            <a href="{{ url_for('report_view', rid=r.id) }}">{{ label_name(r.final_label or r.ai_label) }}</a><br>
+            <small>{{ r.created_at[:10] }}</small> {{ m.status_badge(r.status) }}
+          </div>
+        </div>
+      {% else %}
+        <p class="muted">{{ t('farmer.no_reports') }}</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

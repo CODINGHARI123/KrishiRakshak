@@ -1,0 +1,223 @@
+{
+  "apple": {
+    "en": "Apple",
+    "hi": "सेब",
+    "te": "ఆపిల్",
+    "duration": 180,
+    "diseases": [
+      "apple_scab",
+      "black_rot",
+      "rust",
+      "powdery_mildew"
+    ],
+    "ta": "ஆப்பிள்",
+    "kn": "ಸೇಬು",
+    "mr": "सफरचंद"
+  },
+  "blueberry": {
+    "en": "Blueberry",
+    "hi": "ब्लूबेरी",
+    "te": "బ్లూబెర్రీ",
+    "duration": 150,
+    "diseases": [
+      "leaf_spot_humid"
+    ],
+    "ta": "புளூபெர்ரி",
+    "kn": "ಬ್ಲೂಬೆರಿ",
+    "mr": "ब्लूबेरी"
+  },
+  "cherry": {
+    "en": "Cherry",
+    "hi": "चेरी",
+    "te": "చెర్రీ",
+    "duration": 150,
+    "diseases": [
+      "powdery_mildew"
+    ],
+    "ta": "செர்ரி",
+    "kn": "ಚೆರ್ರಿ",
+    "mr": "चेरी"
+  },
+  "corn": {
+    "en": "Maize",
+    "hi": "मक्का",
+    "te": "మొక్కజొన్న",
+    "duration": 110,
+    "diseases": [
+      "rust",
+      "northern_leaf_blight",
+      "gray_leaf_spot"
+    ],
+    "ta": "மக்காச்சோளம்",
+    "kn": "ಮೆಕ್ಕೆಜೋಳ",
+    "mr": "मका"
+  },
+  "grape": {
+    "en": "Grape",
+    "hi": "अंगूर",
+    "te": "ద్రాక్ష",
+    "duration": 150,
+    "diseases": [
+      "black_rot",
+      "leaf_spot_humid",
+      "powdery_mildew"
+    ],
+    "ta": "திராட்சை",
+    "kn": "ದ್ರಾಕ್ಷಿ",
+    "mr": "द्राक्ष"
+  },
+  "orange": {
+    "en": "Orange",
+    "hi": "संतरा",
+    "te": "నారింజ",
+    "duration": 365,
+    "diseases": [
+      "vector_hot_dry"
+    ],
+    "ta": "ஆரஞ்சு",
+    "kn": "ಕಿತ್ತಳೆ",
+    "mr": "संत्रा"
+  },
+  "peach": {
+    "en": "Peach",
+    "hi": "आड़ू",
+    "te": "పీచ్",
+    "duration": 180,
+    "diseases": [
+      "bacterial"
+    ],
+    "ta": "பீச்",
+    "kn": "ಪೀಚ್",
+    "mr": "पीच"
+  },
+  "pepper": {
+    "en": "Capsicum",
+    "hi": "शिमला मिर्च",
+    "te": "క్యాప్సికమ్",
+    "duration": 120,
+    "diseases": [
+      "bacterial",
+      "mites_hot_dry"
+    ],
+    "ta": "குடைமிளகாய்",
+    "kn": "ದೊಣ್ಣೆ ಮೆಣಸಿನಕಾಯಿ",
+    "mr": "ढोबळी मिरची"
+  },
+  "potato": {
+    "en": "Potato",
+    "hi": "आलू",
+    "te": "బంగాళాదుంప",
+    "duration": 100,
+    "diseases": [
+      "late_blight",
+      "early_blight"
+    ],
+    "ta": "உருளைக்கிழங்கு",
+    "kn": "ಆಲೂಗಡ್ಡೆ",
+    "mr": "बटाटा"
+  },
+  "raspberry": {
+    "en": "Raspberry",
+    "hi": "रास्पबेरी",
+    "te": "రాస్ప్బెర్రీ",
+    "duration": 150,
+    "diseases": [
+      "leaf_spot_humid"
+    ],
+    "ta": "ராஸ்பெர்ரி",
+    "kn": "ರಾಸ್ಪ್‌ಬೆರಿ",
+    "mr": "रास्पबेरी"
+  },
+  "soybean": {
+    "en": "Soybean",
+    "hi": "सोयाबीन",
+    "te": "సోయాబీన్",
+    "duration": 100,
+    "diseases": [
+      "rust",
+      "leaf_spot_humid"
+    ],
+    "ta": "சோயாபீன்",
+    "kn": "ಸೋಯಾಬೀನ್",
+    "mr": "सोयाबीन"
+  },
+  "squash": {
+    "en": "Squash / Pumpkin",
+    "hi": "कद्दू",
+    "te": "గుమ్మడి",
+    "duration": 100,
+    "diseases": [
+      "powdery_mildew"
+    ],
+    "ta": "பூசணி",
+    "kn": "ಸ್ಕ್ವಾಷ್ / ಕುಂಬಳಕಾಯಿ",
+    "mr": "स्क्वॅश / भोपळा"
+  },
+  "strawberry": {
+    "en": "Strawberry",
+    "hi": "स्ट्रॉबेरी",
+    "te": "స్ట్రాబెర్రీ",
+    "duration": 150,
+    "diseases": [
+      "leaf_spot_humid"
+    ],
+    "ta": "ஸ்ட்ராபெர்ரி",
+    "kn": "ಸ್ಟ್ರಾಬೆರಿ",
+    "mr": "स्ट्रॉबेरी"
+  },
+  "tomato": {
+    "en": "Tomato",
+    "hi": "टमाटर",
+    "te": "టమాటా",
+    "duration": 120,
+    "diseases": [
+      "late_blight",
+      "early_blight",
+      "bacterial",
+      "leaf_spot_humid",
+      "mites_hot_dry",
+      "vector_hot_dry"
+    ],
+    "ta": "தக்காளி",
+    "kn": "ಟೊಮೆಟೊ",
+    "mr": "टोमॅटो"
+  },
+  "cotton": {
+    "en": "Cotton",
+    "hi": "कपास",
+    "te": "పత్తి",
+    "duration": 170,
+    "diseases": [
+      "vector_hot_dry",
+      "leaf_spot_humid"
+    ],
+    "ta": "பருத்தி",
+    "kn": "ಹತ್ತಿ",
+    "mr": "कापूस"
+  },
+  "rice": {
+    "en": "Rice (Paddy)",
+    "hi": "धान",
+    "te": "వరి",
+    "duration": 120,
+    "diseases": [
+      "leaf_spot_humid"
+    ],
+    "ta": "நெல்",
+    "kn": "ಭತ್ತ",
+    "mr": "भात"
+  },
+  "brinjal": {
+    "en": "Brinjal",
+    "hi": "बैंगन",
+    "te": "వంకాయ",
+    "duration": 150,
+    "diseases": [
+      "bacterial",
+      "mites_hot_dry"
+    ],
+    "ta": "கத்தரி",
+    "kn": "ಬದನೆ",
+    "mr": "वांगी"
+  }
+}

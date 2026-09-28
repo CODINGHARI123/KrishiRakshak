@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero">
+  <svg class="leaf" viewBox="0 0 100 100"><path d="M5 95C5 45 40 10 95 5 90 60 55 95 5 95z" fill="#fff"/></svg>
+  <h1>{{ t('home.title') }}</h1>
+  <p>{{ t('home.subtitle') }}</p>
+  <div class="row" style="margin-top:18px">
+    <a class="btn big secondary" href="{{ url_for('login') }}">{{ t('nav.login') }}</a>
+    <a class="btn big" style="background:#0f3d24" href="{{ url_for('register') }}">{{ t('home.cta_register') }}</a>
+  </div>
+</section>
+
+<div class="grid g4" style="margin-bottom:18px">
+  <div class="card kpi"><div class="v">{{ stats.classes }}</div><div class="l">{{ t('home.stat_classes') }}</div></div>
+  <div class="card kpi"><div class="v">{{ '%.1f'|format(metrics.test_accuracy*100) if metrics else '—' }}%</div><div class="l">{{ t('home.stat_accuracy') }}</div></div>
+  <div class="card kpi"><div class="v">{{ stats.reports }}</div><div class="l">{{ t('home.stat_reports') }}</div></div>
+  <div class="card kpi"><div class="v">{{ stats.hotspots }}</div><div class="l">{{ t('home.stat_hotspots') }}</div></div>
+</div>
+
+<div class="grid g3">
+  {% for ic, k in [('📷','f1'),('🌦','f2'),('🪤','f3'),('📍','f4'),('👩‍🔬','f5'),('🗣','f6')] %}
+  <div class="card feature">
+    <h3><span class="ic">{{ ic }}</span>{{ t('home.' ~ k ~ '_t') }}</h3>
+    <p class="muted" style="margin:0">{{ t('home.' ~ k ~ '_d') }}</p>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="card">
+  <h2>{{ t('home.how') }}</h2>
+  <ol style="margin:0;padding-left:20px">
+    <li>{{ t('home.how1') }}</li><li>{{ t('home.how2') }}</li><li>{{ t('home.how3') }}</li><li>{{ t('home.how4') }}</li><li>{{ t('home.how5') }}</li>
+  </ol>
+</div>
+{% endblock %}

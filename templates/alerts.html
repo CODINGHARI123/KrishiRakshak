@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as m with context %}
+{% block title %}{{ t('nav.alerts') }}{% endblock %}
+{% block content %}
+<h1>🔔 {{ t('nav.alerts') }}</h1>
+<div class="card">
+  {% for a in alerts %}
+    <div class="alert-item {{ 'unread' if not a.is_read }}">
+      {{ m.alert_icon(a.kind, a.level) }}
+      <div style="flex:1">
+        <div class="t">{% if a.link %}<a href="{{ a.link }}">{{ a.title }}</a>{% else %}{{ a.title }}{% endif %} {{ m.level_badge(a.level) }}</div>
+        <small>{{ a.body }}{% if a.farm_name %} · {{ a.farm_name }}{% endif %} · {{ a.created_at[:16] }}</small>
+      </div>
+    </div>
+  {% else %}
+    <p class="muted">{{ t('alerts.none') }}</p>
+  {% endfor %}
+</div>
+{% endblock %}

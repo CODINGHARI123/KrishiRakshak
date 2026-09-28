@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as m with context %}
+{% block title %}{{ adv.name }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('advisories') }}">← {{ t('nav.advisories') }}</a></p>
+<div class="card">
+  <h1 style="margin-bottom:4px">{{ adv.name }}</h1>
+  <div class="muted"><i>{{ adv.pathogen }}</i> · {{ adv.type_text }}</div>
+  {% if pest %}<p><span class="badge lvl-high">ETL: {{ pest.etl }} {{ pest.unit }}</span> <span class="badge">{{ t('trap.kind.' ~ pest.trap) }}</span></p>{% endif %}
+  {% if adv.symptoms %}<p><b>{{ t('report.symptoms') }}:</b> {{ adv.symptoms }}</p>{% endif %}
+  {{ m.advisory(adv, speech) }}
+</div>
+{% endblock %}

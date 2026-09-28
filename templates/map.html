@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}{{ t('nav.map') }}{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='vendor/leaflet/leaflet.css') }}">{% endblock %}
+{% block content %}
+<div class="row between">
+  <h1 style="margin:0">📍 {{ t('map.title') }}</h1>
+  {% if staff %}
+  <div class="row">
+    <label style="font-weight:500"><input type="checkbox" id="l-heat" checked style="width:auto"> {{ t('map.heat') }}</label>
+    <label style="font-weight:500"><input type="checkbox" id="l-rep" checked style="width:auto"> {{ t('map.reports') }}</label>
+    <label style="font-weight:500"><input type="checkbox" id="l-farm" style="width:auto"> {{ t('map.farms') }}</label>
+    <select id="days" style="width:auto"><option value="14">14 {{ t('common.days') }}</option><option value="30" selected>30 {{ t('common.days') }}</option><option value="90">90 {{ t('common.days') }}</option></select>
+  </div>
+  {% endif %}
+</div>
+<p class="muted">{{ t('map.sub') }}</p>
+<div class="split">
+  <div><div id="map"></div></div>
+  <div class="card">
+    <h2>{{ t('map.hotspots') }}</h2>
+    <div id="hs-list"><p class="muted">…</p></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/leaflet/leaflet.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/leaflet-heat.js') }}"></script>
+<script>
+  const STAFF = {{ 'true' if staff else 'false' }};
+  const COL = {severe: '#c62828', high: '#e65100', moderate: '#c79100', low: '#2e7d32'};
+  const SCOL = {pending: '#f9a825', confirmed: '#2e7d32', corrected: '#1565c0', rejected: '#90a4ae'};
+  const T = {cases: {{ t('map.cases')|tojson }}, last7: {{ t('map.last7')|tojson }}, radius: {{ t('map.radius')|tojson }},
+             none: {{ t('map.none')|tojson }}, open: {{ t('common.open')|tojson }}, risk: {{ t('map.risk')|tojson }}};
+  const map = L.map('map').setView([19.3, 76.2], 6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18, attribution: '© OpenStreetMap'}).addTo(map);
+  const hsLayer = L.layerGroup().addTo(map), repLayer = L.layerGroup(), farmLayer = L.layerGroup();
+  let heat = null;
+
+  const legend = L.control({position: 'bottomleft'});
+  legend.onAdd = () => {
+    const d = L.DomUtil.create('div', 'legend');
+    d.innerHTML = Object.entries(COL).map(([k, c]) => `<i style="background:${c}"></i>${k}`).join('<br>');
+    return d;
+  };
+  legend.addTo(map);
+
+  function esc(s) { return String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  async function loadHotspots() {
+    const hs = await (await fetch('/api/hotspots')).json();
+    hsLayer.clearLayers();
+    const list = document.getElementById('hs-list');
+    if (!hs.length) { list.innerHTML = `<p class="muted">${T.none}</p>`; return; }
+    list.innerHTML = '';
+    hs.forEach(h => {
+      const c = L.circle([h.lat, h.lon], {radius: h.radius_km * 1000, color: COL[h.severity], fillOpacity: .18, weight: 2})
+        .bindPopup(`<b>${esc(h.name)}</b><br>${h.cases} ${T.cases} · ${h.last7} ${T.last7}<br>${T.radius}: ${h.radius_km} km<br>${esc(h.districts.join(', '))}`);
+      hsLayer.addLayer(c);
+      const el = document.createElement('div');
+      el.className = 'alert-item';
+      el.style.cursor = 'pointer';
+      el.innerHTML = `<span class="ic lvl-${h.severity}">📍</span><div><b>${esc(h.name)}</b><br><small>${h.cases} ${T.cases} · ${h.last7} ${T.last7} · ${esc(h.districts.join(', '))}</small></div>`;
+      el.onclick = () => { map.setView([h.lat, h.lon], 11); c.openPopup(); };
+      list.appendChild(el);
+    });
+  }
+
+  async function loadReports() {
+    const days = document.getElementById('days').value;
+    const rows = await (await fetch('/api/reports?days=' + days)).json();
+    repLayer.clearLayers();
+    const pts = [];
+    rows.forEach(r => {
+      if (r.type === 'healthy' || r.type === 'background') return;
+      if (r.status !== 'rejected') pts.push([r.lat, r.lon, r.status === 'pending' ? .5 : 1]);
+      repLayer.addLayer(L.circleMarker([r.lat, r.lon], {radius: 5, color: SCOL[r.status], fillOpacity: .8, weight: 1})
+        .bindPopup(`<b>${esc(r.name)}</b><br>${esc(r.status)} · ${esc(r.created_at.slice(0,10))}<br><a href="/officer/review/${r.id}">${T.open} #${r.id}</a>`));
+    });
+    if (heat) map.removeLayer(heat);
+    heat = L.heatLayer(pts, {radius: 28, blur: 22, maxZoom: 11});
+    if (document.getElementById('l-heat').checked) heat.addTo(map);
+  }
+
+  async function loadFarms() {
+    const rows = await (await fetch('/api/farms-risk')).json();
+    farmLayer.clearLayers();
+    rows.forEach(f => farmLayer.addLayer(L.circleMarker([f.lat, f.lon], {radius: 7, color: '#333', weight: 1, fillColor: COL[f.level], fillOpacity: .9})
+      .bindPopup(`<b>${esc(f.name)}</b> (${esc(f.crop)})<br>${T.risk}: ${esc(f.risk)} — ${f.score}<br><a href="/farms/${f.id}">${T.open}</a>`)));
+  }
+
+  loadHotspots();
+  if (STAFF) {
+    repLayer.addTo(map);
+    loadReports();
+    document.getElementById('days').onchange = loadReports;
+    document.getElementById('l-heat').onchange = e => e.target.checked ? heat && heat.addTo(map) : heat && map.removeLayer(heat);
+    document.getElementById('l-rep').onchange = e => e.target.checked ? repLayer.addTo(map) : map.removeLayer(repLayer);
+    let farmsLoaded = false;
+    document.getElementById('l-farm').onchange = e => {
+      if (e.target.checked) { farmLayer.addTo(map); if (!farmsLoaded) { loadFarms(); farmsLoaded = true; } }
+      else map.removeLayer(farmLayer);
+    };
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}{{ t('nav.scan') }}{% endblock %}
+{% block content %}
+<h1>📷 {{ t('diag.title') }}</h1>
+{% if not model_ready %}<div class="flash error">{{ t('diag.no_model') }}</div>{% endif %}
+<form method="post" enctype="multipart/form-data" class="card" id="dform">
+  <div class="grid g2">
+    <div>
+      <label class="drop" id="drop" for="photo">
+        <div class="big-ic">🍃</div>
+        <b>{{ t('diag.pick') }}</b>
+        <div class="hint">{{ t('diag.pick_hint') }}</div>
+        <img id="preview" alt="" hidden>
+      </label>
+      <input type="file" id="photo" name="photo" accept="image/*" capture="environment" hidden required>
+    </div>
+    <div>
+      {% if farms %}
+      <div class="field"><label>{{ t('diag.farm') }}</label>
+        <select name="farm_id" id="farmsel" onchange="syncCrop()">
+          {% for f in farms %}<option value="{{ f.id }}" data-crop="{{ f.crop }}" {{ 'selected' if preselect==f.id }}>{{ f.name }} — {{ crop_name(f.crop) }}</option>{% endfor %}
+          <option value="" data-crop="">{{ t('diag.no_farm') }}</option>
+        </select></div>
+      {% endif %}
+      <div class="field"><label>{{ t('farm.crop') }}</label>
+        <select name="crop" id="cropsel">
+          <option value="">{{ t('diag.crop_auto') }}</option>
+          {% for k in CROPS if DISEASES.values()|selectattr('crop','equalto',k)|list %}<option value="{{ k }}">{{ crop_name(k) }}</option>{% endfor %}
+        </select>
+        <div class="hint">{{ t('diag.crop_hint') }}</div></div>
+      <input type="hidden" name="lat" id="lat"><input type="hidden" name="lon" id="lon">
+      <div class="notice green" style="font-size:.9rem">
+        <b>{{ t('diag.tips') }}</b>
+        <ul style="margin:4px 0 0;padding-left:18px"><li>{{ t('diag.tip1') }}</li><li>{{ t('diag.tip2') }}</li><li>{{ t('diag.tip3') }}</li></ul>
+      </div>
+      <button class="btn big" style="width:100%" id="go" {{ 'disabled' if not model_ready }}>🔍 {{ t('diag.submit') }}</button>
+    </div>
+  </div>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+  const inp = document.getElementById('photo'), prev = document.getElementById('preview'), drop = document.getElementById('drop');
+  inp.addEventListener('change', () => {
+    if (inp.files[0]) { prev.src = URL.createObjectURL(inp.files[0]); prev.hidden = false; }
+  });
+  ['dragover','dragenter'].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave','drop'].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', ev => { inp.files = ev.dataTransfer.files; inp.dispatchEvent(new Event('change')); });
+  function syncCrop() {
+    const f = document.getElementById('farmsel'); if (!f) return;
+    const c = f.options[f.selectedIndex].dataset.crop;
+    const cs = document.getElementById('cropsel');
+    if ([...cs.options].some(o => o.value === c)) cs.value = c; else cs.value = '';
+  }
+  syncCrop();
+  if (navigator.geolocation) navigator.geolocation.getCurrentPosition(p => {
+    document.getElementById('lat').value = p.coords.latitude; document.getElementById('lon').value = p.coords.longitude;
+  }, () => {});
+  document.getElementById('dform').addEventListener('submit', () => {
+    const b = document.getElementById('go'); b.disabled = true; b.textContent = '⏳ {{ t("diag.analysing") }}';
+  });
+</script>
+{% endblock %}

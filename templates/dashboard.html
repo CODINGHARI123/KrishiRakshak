@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}{{ t('nav.dashboard') }}{% endblock %}
+{% block content %}
+<div class="row between">
+  <h1 style="margin:0">📊 {{ t('dash.title') }}</h1>
+  <select id="days" style="width:auto"><option value="30">30 {{ t('common.days') }}</option><option value="90" selected>90 {{ t('common.days') }}</option><option value="365">365 {{ t('common.days') }}</option></select>
+</div>
+<p class="muted">{{ t('dash.sub') }}</p>
+
+<div class="grid g4" id="kpis"></div>
+
+<div class="grid g2">
+  <div class="card"><h3>{{ t('dash.weekly') }}</h3><div class="chart-box"><canvas id="c-weekly"></canvas></div></div>
+  <div class="card"><h3>{{ t('dash.top') }}</h3><div class="chart-box"><canvas id="c-top"></canvas></div></div>
+  <div class="card"><h3>{{ t('dash.district') }}</h3><div class="chart-box"><canvas id="c-dist"></canvas></div></div>
+  <div class="card"><h3>{{ t('dash.conf') }}</h3><div class="chart-box"><canvas id="c-conf"></canvas></div></div>
+  <div class="card"><h3>{{ t('dash.followups') }}</h3><div class="chart-box"><canvas id="c-fu"></canvas></div></div>
+  <div class="card"><h3>{{ t('dash.traps') }}</h3><div class="chart-box"><canvas id="c-trap"></canvas></div></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script>
+  const L = {{ {
+    'reports': t('dash.k_reports'), 'pending': t('dash.k_pending'), 'agreement': t('dash.k_agreement'),
+    'avg_response_h': t('dash.k_response'), 'referrals': t('dash.k_referrals'), 'hotspots': t('dash.k_hotspots'),
+    'coverage': t('dash.k_coverage'), 'no_chem_pct': t('dash.k_nochem'),
+    'confirmed': t('status.confirmed'), 'corrected': t('status.corrected'), 'rejected': t('status.rejected'),
+    'pending_s': t('status.pending'), 'better': t('fu.better'), 'same': t('fu.same'), 'worse': t('fu.worse'), 'due': t('dash.due'),
+    'readings': t('dash.readings'), 'above': t('trap.above_etl'), 'cases': t('map.cases')
+  }|tojson }};
+  const G = ['#1b6e3c', '#e65100', '#1565c0', '#fdd835', '#8e24aa', '#43a047', '#fb8c00', '#00838f', '#c62828', '#7cb342', '#6d4c41', '#546e7a', '#ec407a'];
+  Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+  Chart.defaults.plugins.legend.labels.boxWidth = 12;
+  const charts = {};
+  function mk(id, cfg) { if (charts[id]) charts[id].destroy(); cfg.options = Object.assign({maintainAspectRatio: false}, cfg.options || {}); charts[id] = new Chart(document.getElementById(id), cfg); }
+
+  async function load() {
+    const s = await (await fetch('/api/stats?days=' + document.getElementById('days').value)).json();
+    const k = s.kpi, f = (v, suf='') => v === null || v === undefined ? '—' : v + suf;
+    document.getElementById('kpis').innerHTML = [
+      ['reports', k.reports], ['pending', k.pending], ['agreement', f(k.agreement, '%')], ['avg_response_h', f(k.avg_response_h, ' h')],
+      ['referrals', k.referrals], ['hotspots', k.hotspots], ['coverage', f(k.coverage, '%')], ['no_chem_pct', f(k.no_chem_pct, '%')]
+    ].map(([key, v]) => `<div class="card kpi"><div class="v">${v}</div><div class="l">${L[key]}</div></div>`).join('');
+
+    mk('c-weekly', {type: 'bar', data: {labels: s.weekly.map(w => w.week.slice(5)), datasets: [
+      {label: L.confirmed, data: s.weekly.map(w => w.confirmed), backgroundColor: '#2e7d32'},
+      {label: L.corrected, data: s.weekly.map(w => w.corrected), backgroundColor: '#1565c0'},
+      {label: L.pending_s, data: s.weekly.map(w => w.pending), backgroundColor: '#f9a825'},
+      {label: L.rejected, data: s.weekly.map(w => w.rejected), backgroundColor: '#b0bec5'}]},
+      options: {scales: {x: {stacked: true}, y: {stacked: true, beginAtZero: true}}}});
+    mk('c-top', {type: 'bar', data: {labels: s.top_diseases.map(d => d.name), datasets: [{label: L.cases, data: s.top_diseases.map(d => d.n), backgroundColor: '#e65100'}]},
+      options: {indexAxis: 'y', plugins: {legend: {display: false}}, scales: {y: {ticks: {font: {size: 11}}}}}});
+    mk('c-dist', {type: 'doughnut', data: {labels: s.districts.map(d => d.district), datasets: [{data: s.districts.map(d => d.n), backgroundColor: G}]},
+      options: {plugins: {legend: {position: 'right'}}}});
+    mk('c-conf', {type: 'bar', data: {labels: s.confidence.map((_, i) => `${i*10}-${i*10+10}%`), datasets: [{label: L.reports, data: s.confidence, backgroundColor: s.confidence.map((_, i) => i < 6 ? '#e65100' : '#2e7d32')}]},
+      options: {plugins: {legend: {display: false}}}});
+    mk('c-fu', {type: 'pie', data: {labels: [L.better, L.same, L.worse, L.due], datasets: [{data: [s.followups.better, s.followups.same, s.followups.worse, s.followups.due], backgroundColor: ['#2e7d32', '#fdd835', '#c62828', '#90a4ae']}]},
+      options: {plugins: {legend: {position: 'right'}}}});
+    mk('c-trap', {type: 'bar', data: {labels: s.traps.map(x => x.name), datasets: [
+      {label: L.readings, data: s.traps.map(x => x.n), backgroundColor: '#7cb342'},
+      {label: L.above, data: s.traps.map(x => x.above), backgroundColor: '#c62828'}]},
+      options: {scales: {y: {beginAtZero: true}}}});
+  }
+  document.getElementById('days').onchange = load;
+  load();
+</script>
+{% endblock %}

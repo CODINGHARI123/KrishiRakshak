@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}{{ t('nav.advisories') }}{% endblock %}
+{% block content %}
+<h1>📚 {{ t('lib.title') }}</h1>
+<p class="muted">{{ t('lib.sub') }}</p>
+<div class="tabs">
+  <a href="{{ url_for('advisories') }}" class="{{ 'on' if not crop }}">{{ t('lib.all') }}</a>
+  {% for k in CROPS %}<a href="{{ url_for('advisories', crop=k) }}" class="{{ 'on' if crop==k }}">{{ crop_name(k) }}</a>{% endfor %}
+</div>
+{% if items %}
+<h2>🦠 {{ t('lib.diseases') }}</h2>
+<div class="grid g3">
+  {% for k, d in items %}
+  <a class="card" href="{{ url_for('advisory_view', label=k) }}" style="color:inherit;text-decoration:none">
+    <h3 style="margin-bottom:4px">{{ label_name(k) }}</h3>
+    <small class="muted"><i>{{ d.pathogen }}</i></small><br>
+    <span class="badge">{{ t('type.' ~ d.type) }}</span>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
+{% if pests %}
+<h2>🐛 {{ t('lib.pests') }}</h2>
+<div class="grid g3">
+  {% for k, p in pests %}
+  <a class="card" href="{{ url_for('advisory_view', label=k) }}" style="color:inherit;text-decoration:none">
+    <h3 style="margin-bottom:4px">{{ label_name(k) }}</h3>
+    <small class="muted"><i>{{ p.scientific }}</i> · {% for c in p.crops %}{{ crop_name(c) }}{{ ', ' if not loop.last }}{% endfor %}</small><br>
+    <span class="badge">ETL: {{ p.etl }} {{ p.unit }}</span>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

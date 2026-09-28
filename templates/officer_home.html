@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as m with context %}
+{% block title %}{{ t('nav.queue') }}{% endblock %}
+{% block content %}
+<div class="row between">
+  <h1 style="margin:0">👩‍🔬 {{ t('officer.title') }}</h1>
+  <form method="post" action="{{ url_for('officer_scan') }}"><button class="btn secondary small">🔄 {{ t('officer.scan') }}</button></form>
+</div>
+<p class="muted">{{ t('officer.sub') }}</p>
+<div class="tabs">
+  {% for s in ['pending','confirmed','corrected','rejected'] %}
+  <a href="{{ url_for('officer_home', status=s) }}" class="{{ 'on' if status==s }}">{{ t('status.' ~ s) }} ({{ counts[s] }})</a>
+  {% endfor %}
+</div>
+
+<div class="split">
+  <div class="card table-wrap">
+    <table>
+      <tr><th></th><th>{{ t('report.diagnosis') }}</th><th>AI %</th><th>{{ t('form.district') }}</th><th>{{ t('common.date') }}</th><th></th></tr>
+      {% for r in rows %}
+      {% set p = priority(r) %}
+      <tr>
+        <td><img class="thumb" src="{{ url_for('static', filename=r.image_path) }}" alt="" loading="lazy"></td>
+        <td>
+          <a href="{{ url_for('officer_review', rid=r.id) }}"><b>{{ label_name(r.final_label or r.ai_label) }}</b></a><br>
+          <small>#{{ r.id }} · {{ r.farmer_name or '' }}</small>
+          {% for x in (r.referral_reason or '').split(',') if x %}<span class="badge {{ 'lvl-severe' if x in ('notifiable','not_improving') else 'lvl-moderate' }}">{{ t('reason.' ~ x) }}</span> {% endfor %}
+        </td>
+        <td><span class="badge {{ 'lvl-low' if r.ai_conf>= 0.8 else 'lvl-moderate' if r.ai_conf>= 0.6 else 'lvl-high' }}">{{ (r.ai_conf*100)|round|int }}</span></td>
+        <td>{{ r.district or '' }}</td>
+        <td>{{ r.created_at[:10] }}</td>
+        <td><a class="btn small" href="{{ url_for('officer_review', rid=r.id) }}">{{ t('officer.review') if status=='pending' else t('common.open') }}</a></td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="muted">{{ t('officer.empty') }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div>
+    <div class="card">
+      <h2>⚠ {{ t('officer.worse') }}</h2>
+      {% for w in worse %}
+        <div class="alert-item"><div><a href="{{ url_for('officer_review', rid=w.rid) }}">{{ label_name(w.label) }}</a><br><small>{{ w.farmer_name }} · {{ (w.done_at or '')[:10] }}{% if w.note %} · “{{ w.note }}”{% endif %}</small></div></div>
+      {% else %}<p class="muted">{{ t('officer.none') }}</p>{% endfor %}
+    </div>
+    <div class="card">
+      <h2>🪤 {{ t('officer.traps') }}</h2>
+      {% for x in traps %}
+        <div class="alert-item"><div><b>{{ risk_name(x.pest) }}</b> — {{ x.value }} ({{ t('trap.etl') }} {{ PESTS[x.pest].etl }})<br><small>{{ x.farm_name }} · {{ x.district or '' }} · {{ x.created_at[:10] }}</small></div></div>
+      {% else %}<p class="muted">{{ t('officer.none') }}</p>{% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as m with context %}
+{% block title %}{{ t('nav.reports') }}{% endblock %}
+{% block content %}
+<h1>{{ t('nav.reports') }}</h1>
+<div class="card table-wrap">
+  <table>
+    <tr><th></th><th>#</th><th>{{ t('common.date') }}</th>{% if user.role != 'farmer' %}<th>{{ t('common.farmer') }}</th><th>{{ t('form.district') }}</th>{% endif %}<th>{{ t('report.diagnosis') }}</th><th>AI %</th><th>{{ t('common.status') }}</th></tr>
+    {% for r in rows %}
+    <tr>
+      <td><img class="thumb" src="{{ url_for('static', filename=r.image_path) }}" alt="" loading="lazy"></td>
+      <td><a href="{{ url_for('officer_review', rid=r.id) if user.role != 'farmer' else url_for('report_view', rid=r.id) }}">{{ r.id }}</a></td>
+      <td>{{ r.created_at[:10] }}</td>
+      {% if user.role != 'farmer' %}<td>{{ r.farmer_name or '' }}</td><td>{{ r.district or '' }}</td>{% endif %}
+      <td><a href="{{ url_for('report_view', rid=r.id) }}">{{ label_name(r.final_label or r.ai_label) }}</a></td>
+      <td>{{ (r.ai_conf*100)|round|int }}</td>
+      <td>{{ m.status_badge(r.status) }}{% if r.referred %} <span class="badge" title="referred">🏥</span>{% endif %}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="8" class="muted">{{ t('farmer.no_reports') }}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

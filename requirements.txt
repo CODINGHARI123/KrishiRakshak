@@ -1,0 +1,6 @@
+flask>=3.0
+tensorflow==2.18.*
+numpy
+pillow
+scikit-learn
+matplotlib

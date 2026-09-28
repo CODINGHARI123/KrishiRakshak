@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as m with context %}
+{% block title %}{{ label_name(label) }}{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="result-head">
+    <img src="{{ url_for('static', filename=r.image_path) }}" alt="leaf photo">
+    <div>
+      <div class="row between">
+        <span class="muted">{{ t('report.no') }} #{{ r.id }} · {{ r.created_at[:16] }}{% if r.farm_name %} · {{ r.farm_name }}{% endif %}</span>
+        {{ m.status_badge(r.status) }}
+      </div>
+      <h1 style="margin:6px 0">{{ label_name(label) }}</h1>
+      {% if adv and adv.pathogen %}<div class="muted"><i>{{ adv.pathogen }}</i> · {{ adv.type_text }}</div>{% endif %}
+
+      {% if r.status == 'pending' %}
+        <p>{{ t('report.ai_says') }} <b>{{ (r.ai_conf*100)|round(1) }}%</b> {{ t('report.confidence') }}. {{ t('report.awaiting') }}</p>
+      {% elif r.status in ('confirmed','corrected') %}
+        <div class="notice green">✅ {{ t('report.validated_by', name=r.officer_name or '') }}{% if r.status=='corrected' %} — {{ t('report.corrected_from') }} <s>{{ label_name(r.ai_label) }}</s>{% endif %}{% if r.officer_note %}<br><i>“{{ r.officer_note }}”</i>{% endif %}</div>
+        {% if r.severity %}<p>{{ t('review.severity') }}: {{ m.level_badge({'low':'low','medium':'moderate','high':'high'}[r.severity]) }}</p>{% endif %}
+      {% elif r.status == 'rejected' %}
+        <div class="notice">{{ t('report.rejected') }}{% if r.officer_note %}<br><i>“{{ r.officer_note }}”</i>{% endif %}</div>
+      {% endif %}
+
+      <h3 style="margin-top:14px">{{ t('report.top3') }}</h3>
+      {% for x in top3 %}
+        {% set lv = 'low' if x.conf >= 0.8 else 'moderate' if x.conf >= 0.5 else 'high' %}
+        <div class="conf-row"><span>{{ label_name(x.label) }}</span>{{ m.meter((x.conf*100)|round, lv) }}<b>{{ (x.conf*100)|round(1) }}%</b></div>
+      {% endfor %}
+
+      {% for i in issues %}
+        {% if i.startswith('crop_mismatch:') %}
+          <div class="notice">⚠ {{ t('report.mismatch', name=label_name(i.split(':',1)[1])) }}</div>
+        {% else %}
+          <div class="notice">📷 {{ t('quality.' ~ i) }}</div>
+        {% endif %}
+      {% endfor %}
+      {% if r.ai_conf < 0.6 and r.status == 'pending' %}<div class="notice red">{{ t('report.low_conf') }}</div>{% endif %}
+    </div>
+  </div>
+</div>
+
+{% if farm_risk %}
+<div class="notice {{ 'red' if farm_risk.level in ('high','severe') else 'blue' }}">
+  🌦 {{ t('report.weather_link', level=t('level.' ~ farm_risk.level), score=farm_risk.score) }}
+  {% if farm_risk.level in ('high','severe') %}<b>{{ t('report.act_now') }}</b>{% endif %}
+</div>
+{% endif %}
+
+<div class="split">
+  <div class="card">
+    <h2>{{ t('adv.title') }}</h2>
+    {% if adv %}{{ m.advisory(adv, speech) }}{% endif %}
+  </div>
+  <div>
+    {% if lab %}
+    <div class="card">
+      <h2>🏥 {{ t('report.referral') }}</h2>
+      <p><b>{{ lab.name }}</b><br><span class="muted">{{ lab.district }}{% if lab.contact %} · {{ lab.contact }}{% endif %}</span></p>
+      <p class="hint">{{ t('report.referral_why') }}: {% for x in (r.referral_reason or '').split(',') if x %}{{ t('reason.' ~ x) }}{{ ', ' if not loop.last }}{% endfor %}</p>
+      <a class="btn small secondary" target="_blank" rel="noopener" href="https://www.openstreetmap.org/directions?to={{ lab.lat }}%2C{{ lab.lon }}">🧭 {{ t('report.directions') }}</a>
+    </div>
+    {% endif %}
+    <div class="card">
+      <h2>📅 {{ t('report.followup') }}</h2>
+      {% for f in followups %}
+        <div class="alert-item">
+          <div style="flex:1">
+            <b>{{ t('farmer.due_on') }} {{ f.due_date }}</b>
+            {% if f.status == 'done' %}
+              — <span class="badge {{ 'lvl-low' if f.outcome=='better' else 'lvl-moderate' if f.outcome=='same' else 'lvl-severe' }}">{{ t('fu.' ~ f.outcome) }}</span>
+              {% if f.note %}<br><small>{{ f.note }}</small>{% endif %}
+            {% else %}
+              <form method="post" action="{{ url_for('followup_done', fid=f.id) }}" style="margin-top:8px">
+                <div class="row">
+                  {% for o, ic in [('better','🙂'),('same','😐'),('worse','☹️')] %}
+                  <label style="font-weight:500"><input type="radio" name="outcome" value="{{ o }}" required style="width:auto"> {{ ic }} {{ t('fu.' ~ o) }}</label>
+                  {% endfor %}
+                </div>
+                <input name="note" placeholder="{{ t('fu.note') }}" style="margin:8px 0">
+                <button class="btn small">{{ t('common.save') }}</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <p class="muted">{{ t('report.no_followup') }}</p>
+      {% endfor %}
+      <a class="btn small secondary" href="{{ url_for('diagnose', farm=r.farm_id) if r.farm_id else url_for('diagnose') }}">📷 {{ t('report.new_photo') }}</a>
+    </div>
+    {% if adv and adv.symptoms %}
+    <div class="card"><h3>{{ t('report.symptoms') }}</h3><p style="margin:0">{{ adv.symptoms }}</p></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

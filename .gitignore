@@ -1,0 +1,18 @@
+# Dataset (download separately – see README) and large regenerable ML cache (>100 MB)
+ml/data/
+ml/features.npz
+
+# Secrets / local state
+.secret_key
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Office lock files / OS files
+~$*
+Thumbs.db
+.DS_Store

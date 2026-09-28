@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}{{ t('nav.model') }}{% endblock %}
+{% block content %}
+<h1>🧠 {{ t('model.title') }}</h1>
+<p class="muted">{{ t('model.sub') }}</p>
+{% if status.running or status.message %}
+<div class="notice blue">{{ '⏳ ' if status.running }}{{ status.message }}{% if status.running %} <a href="">↻</a>{% endif %}</div>
+{% endif %}
+{% if metrics %}
+<div class="grid g4">
+  <div class="card kpi"><div class="v">{{ '%.2f'|format(metrics.test_accuracy*100) }}%</div><div class="l">{{ t('model.acc') }}</div></div>
+  <div class="card kpi"><div class="v">{{ '%.2f'|format(metrics.test_top3_accuracy*100) }}%</div><div class="l">{{ t('model.top3') }}</div></div>
+  <div class="card kpi"><div class="v">{{ '%.3f'|format(metrics.macro_f1) }}</div><div class="l">Macro F1</div></div>
+  <div class="card kpi"><div class="v">v{{ active }}</div><div class="l">{{ t('model.active') }}</div></div>
+</div>
+<div class="grid g2">
+  <div class="card">
+    <h2>{{ t('model.details') }}</h2>
+    <table>
+      <tr><td>{{ t('model.arch') }}</td><td>{{ metrics.architecture }}</td></tr>
+      <tr><td>{{ t('model.dataset') }}</td><td>{{ metrics.dataset }}</td></tr>
+      <tr><td>{{ t('model.images') }}</td><td>{{ metrics.n_images }} ({{ metrics.n_classes }} {{ t('model.classes') }})</td></tr>
+      <tr><td>{{ t('model.split') }}</td><td>{{ metrics.split.train }} / {{ metrics.split.val }} / {{ metrics.split.test }}</td></tr>
+      <tr><td>{{ t('model.epochs') }}</td><td>{{ metrics.epochs_run }}</td></tr>
+      <tr><td>{{ t('model.trained') }}</td><td>{{ metrics.trained_at }}</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h2>{{ t('model.learning') }}</h2>
+    <p>{{ t('model.learning_d') }}</p>
+    <p><b>{{ n_feedback }}</b> {{ t('model.feedback_n') }}</p>
+    <form method="post"><button class="btn" {{ 'disabled' if status.running }}>🔁 {{ t('model.retrain') }}</button></form>
+    {% if versions %}
+    <div class="table-wrap" style="margin-top:12px"><table>
+      <tr><th>{{ t('model.version') }}</th><th>{{ t('model.acc') }}</th><th>{{ t('model.fb_acc') }}</th><th>{{ t('model.feedback') }}</th><th></th></tr>
+      {% for v in versions %}
+      <tr><td>v{{ v.version }}</td><td>{{ '%.2f'|format(v.test_accuracy*100) }}%</td><td>{{ '%.1f'|format(v.feedback_accuracy*100) if v.feedback_accuracy is not none else '—' }}{{ '%' if v.feedback_accuracy is not none }}</td><td>{{ v.n_feedback }}</td>
+        <td>{% if v.active %}<span class="badge lvl-low">{{ t('model.active') }}</span>{% else %}<small>{{ v.notes }}</small>{% endif %}</td></tr>
+      {% endfor %}
+    </table></div>
+    {% endif %}
+  </div>
+</div>
+<div class="grid g2">
+  <div class="card"><h3>{{ t('model.curves') }}</h3><img src="{{ url_for('ml_plot', name='training_curves.png') }}" alt=""></div>
+  <div class="card"><h3>{{ t('model.distribution') }}</h3><img src="{{ url_for('ml_plot', name='class_distribution.png') }}" alt=""></div>
+</div>
+<div class="card"><h3>{{ t('model.confusion') }}</h3><img src="{{ url_for('ml_plot', name='confusion_matrix.png') }}" alt=""></div>
+<div class="card table-wrap">
+  <h3>{{ t('model.per_class') }}</h3>
+  <table>
+    <tr><th>{{ t('report.diagnosis') }}</th><th>Precision</th><th>Recall</th><th>F1</th><th>{{ t('model.support') }}</th></tr>
+    {% for l, v in metrics.per_class.items()|sort(attribute='1.f1-score') %}
+    <tr><td>{{ label_name(l) }}</td><td>{{ '%.3f'|format(v.precision) }}</td><td>{{ '%.3f'|format(v.recall) }}</td><td><b>{{ '%.3f'|format(v['f1-score']) }}</b></td><td>{{ v.support|int }}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% else %}
+<div class="card"><p>{{ t('diag.no_model') }}</p></div>
+{% endif %}
+{% endblock %}

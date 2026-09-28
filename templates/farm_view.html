@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as m with context %}
+{% block title %}{{ farm.name }}{% endblock %}
+{% block content %}
+<div class="row between">
+  <div>
+    <h1 style="margin:0">{{ farm.name }}</h1>
+    <span class="muted">{{ crop_name(farm.crop) }}{% if farm.variety %} ({{ farm.variety }}){% endif %} · {{ farm.village or '' }} {{ farm.district or '' }} · {{ farm.lat|round(3) }}, {{ farm.lon|round(3) }}</span>
+  </div>
+  <a class="btn" href="{{ url_for('diagnose', farm=farm.id) }}">📷 {{ t('nav.scan') }}</a>
+</div>
+
+<div class="grid g4" style="margin:16px 0">
+  <div class="card kpi"><div class="v" style="font-size:1.2rem">{{ t('stage.' ~ r.stage) }}</div><div class="l">{{ t('farm.stage') }}{% if r.das is not none %} · {{ r.das }} {{ t('farm.das') }}{% endif %}</div></div>
+  <div class="card kpi"><div class="v" style="font-size:1.2rem">{{ t('res.' ~ (farm.resistance or 'S')) }}</div><div class="l">{{ t('farm.resistance') }}</div></div>
+  <div class="card kpi"><div class="v" style="font-size:1.2rem">{{ t('drain.' ~ (farm.drainage or 'moderate')) }}</div><div class="l">{{ t('farm.drainage') }}</div></div>
+  <div class="card kpi"><div class="v" style="font-size:1.2rem">{{ t('irr.' ~ (farm.irrigation or 'flood')) }}</div><div class="l">{{ t('farm.irrigation') }}</div></div>
+</div>
+
+<div class="split">
+  <div class="card">
+    <h2>{{ t('farm.risk_title') }}</h2>
+    <p class="hint">{{ t('farm.risk_explain') }}</p>
+    <div class="table-wrap"><table>
+      <tr><th>{{ t('farm.threat') }}</th><th>{{ t('farm.score') }}</th><th>{{ t('farm.weather_fav') }}</th><th>{{ t('farm.nearby') }}</th><th>{{ t('farm.peak') }}</th></tr>
+      {% for x in r.risks %}
+      <tr>
+        <td>{{ '🐛' if x.kind=='pest' else '🦠' }} {{ risk_name(x.key) }}</td>
+        <td style="min-width:130px">{{ m.level_badge(x.level) }} <b>{{ x.score }}</b>{{ m.meter(x.score, x.level) }}</td>
+        <td>{{ (x.weather*100)|round|int }}%</td>
+        <td>{{ x.history_cases }}</td>
+        <td>{{ x.peak_date or '—' }}</td>
+      </tr>
+      {% endfor %}
+    </table></div>
+    {% if r.weather.source != 'open-meteo' %}<p class="notice">{{ t('wx.offline_note') }}</p>{% endif %}
+  </div>
+  <div class="card">
+    <h2>{{ t('farm.weather') }}</h2>
+    <div class="chart-box"><canvas id="wx"></canvas></div>
+    <p class="hint">{{ t('farm.weather_src') }}</p>
+  </div>
+</div>
+
+<div class="grid g2">
+  <div class="card" id="traps">
+    <h2>🪤 {{ t('trap.title') }}</h2>
+    {% if pests %}
+    <form method="post" action="{{ url_for('trap_add', fid=farm.id) }}">
+      <div class="grid g2">
+        <div class="field"><label>{{ t('trap.pest') }}</label>
+          <select name="pest" id="pestsel" onchange="showEtl()">
+            {% for p in pests %}<option value="{{ p }}" data-etl="{{ PESTS[p].etl }}" data-unit="{{ PESTS[p].unit }}" data-trap="{{ PESTS[p].trap }}">{{ risk_name(p) }}</option>{% endfor %}
+          </select></div>
+        <div class="field"><label>{{ t('trap.count') }}</label><input name="count" type="number" min="0" step="0.1" required></div>
+      </div>
+      <div class="grid g2">
+        <div class="field"><label>{{ t('trap.traps') }}</label><input name="traps" type="number" min="1" value="1"></div>
+        <div class="field"><label>{{ t('trap.days') }}</label><input name="days" type="number" min="1" value="1"></div>
+      </div>
+      <p class="hint" id="etl"></p>
+      <button class="btn">{{ t('common.save') }}</button>
+    </form>
+    {% else %}<p class="muted">{{ t('trap.none_for_crop') }}</p>{% endif %}
+    {% if traps %}
+    <div class="table-wrap" style="margin-top:12px"><table>
+      <tr><th>{{ t('common.date') }}</th><th>{{ t('trap.pest') }}</th><th>{{ t('trap.value') }}</th><th></th></tr>
+      {% for x in traps %}
+      <tr><td>{{ x.created_at[:16] }}</td><td>{{ risk_name(x.pest) }}{% if x.source=='sensor' %} <span class="badge">IoT</span>{% endif %}</td><td>{{ x.value }} <small>/ ETL {{ PESTS[x.pest].etl }}</small></td>
+        <td>{% if x.above_etl %}<span class="badge lvl-severe">{{ t('trap.above_etl') }}</span>{% else %}<span class="badge lvl-low">OK</span>{% endif %}</td></tr>
+      {% endfor %}
+    </table></div>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h2>📡 {{ t('sensor.title') }}</h2>
+    {% if sensors %}
+    <div class="table-wrap"><table>
+      <tr><th>{{ t('common.date') }}</th><th>°C</th><th>RH %</th><th>{{ t('sensor.leaf') }}</th><th>{{ t('sensor.soil') }}</th></tr>
+      {% for s in sensors %}<tr><td>{{ s.created_at[:16] }}</td><td>{{ s.temp }}</td><td>{{ s.rh }}</td><td>{{ s.leaf_wetness }}</td><td>{{ s.soil_moisture }}</td></tr>{% endfor %}
+    </table></div>
+    {% else %}
+      <p class="muted">{{ t('sensor.none') }}</p>
+    {% endif %}
+    <details style="margin-top:10px"><summary class="hint">{{ t('sensor.api') }}</summary>
+<pre style="white-space:pre-wrap;font-size:.8rem;background:#f4f6f4;padding:10px;border-radius:8px">POST /api/sensor   (header X-Device-Key)
+{"farm_id": {{ farm.id }}, "device_id": "ws-01", "temp": 24.5, "rh": 92,
+ "leaf_wetness": 65, "soil_moisture": 30,
+ "trap": {"pest": "{{ pests[0] if pests else 'fall_armyworm' }}", "count": 4}}</pre></details>
+  </div>
+</div>
+
+<div class="card">
+  <h2>{{ t('farm.reports') }}</h2>
+  {% for x in reports %}
+    <div class="alert-item"><img class="thumb" src="{{ url_for('static', filename=x.image_path) }}" alt="">
+      <div><a href="{{ url_for('report_view', rid=x.id) }}">{{ label_name(x.final_label or x.ai_label) }}</a><br><small>{{ x.created_at[:10] }}</small> {{ m.status_badge(x.status) }}</div></div>
+  {% else %}<p class="muted">{{ t('farmer.no_reports') }}</p>{% endfor %}
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script>
+  const days = {{ r.weather.days|tojson }};
+  new Chart(document.getElementById('wx'), {
+    data: {
+      labels: days.map(d => d.date.slice(5)),
+      datasets: [
+        {type: 'bar', label: '{{ t("wx.rain") }} (mm)', data: days.map(d => d.rain), backgroundColor: '#90caf9', yAxisID: 'y2'},
+        {type: 'line', label: 'Tmax °C', data: days.map(d => d.tmax), borderColor: '#e65100', tension: .3},
+        {type: 'line', label: 'Tmin °C', data: days.map(d => d.tmin), borderColor: '#fb8c00', borderDash: [4,3], tension: .3},
+        {type: 'line', label: 'RH %', data: days.map(d => d.rh_mean), borderColor: '#1b6e3c', tension: .3, yAxisID: 'y2'},
+      ]
+    },
+    options: {maintainAspectRatio: false, interaction: {mode: 'index', intersect: false},
+      scales: {y: {title: {display: true, text: '°C'}}, y2: {position: 'right', grid: {drawOnChartArea: false}, min: 0}},
+      plugins: {legend: {labels: {boxWidth: 12}}}}
+  });
+  function showEtl() {
+    const o = document.getElementById('pestsel'); if (!o) return;
+    const s = o.options[o.selectedIndex];
+    document.getElementById('etl').textContent = 'ETL: ' + s.dataset.etl + ' ' + s.dataset.unit;
+  }
+  showEtl();
+</script>
+{% endblock %}

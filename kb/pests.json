@@ -1,0 +1,304 @@
+{
+  "_note": "Economic Threshold Levels (ETL) are indicative values from Indian IPM package-of-practice literature and are configurable by the district officer.",
+  "fall_armyworm": {
+    "crops": [
+      "corn"
+    ],
+    "scientific": "Spodoptera frugiperda",
+    "trap": "pheromone",
+    "unit": "moths/trap/day",
+    "etl": 3,
+    "window_days": 1,
+    "name": {
+      "en": "Fall armyworm",
+      "hi": "फॉल आर्मीवर्म",
+      "te": "కత్తెర పురుగు (ఫాల్ ఆర్మీవార్మ్)",
+      "ta": "படைப்புழு",
+      "kn": "ಸೈನಿಕ ಹುಳು (ಫಾಲ್ ಆರ್ಮಿವರ್ಮ್)",
+      "mr": "लष्करी अळी"
+    },
+    "weather": {
+      "tmin": 22,
+      "tmax": 32,
+      "rh_min": 50
+    },
+    "cultural": [
+      "C_MONITOR",
+      "C_WEEDS"
+    ],
+    "biological": [
+      "B_PHEROMONE",
+      "B_NSKE",
+      "B_BEAUVERIA",
+      "B_BIRD_PERCH"
+    ],
+    "chemical": [
+      {
+        "chem": "Emamectin benzoate 5% SG",
+        "dose": "0.4 g/L (spray into the whorl)",
+        "phi": 14
+      },
+      {
+        "chem": "Chlorantraniliprole 18.5% SC",
+        "dose": "0.4 ml/L",
+        "phi": 21
+      }
+    ]
+  },
+  "pink_bollworm": {
+    "crops": [
+      "cotton"
+    ],
+    "scientific": "Pectinophora gossypiella",
+    "trap": "pheromone",
+    "unit": "moths/trap/night (3 consecutive nights)",
+    "etl": 8,
+    "window_days": 1,
+    "name": {
+      "en": "Pink bollworm",
+      "hi": "गुलाबी सुंडी",
+      "te": "గులాబీ రంగు పురుగు",
+      "ta": "இளஞ்சிவப்புக் காய்ப்புழு",
+      "kn": "ಗುಲಾಬಿ ಕಾಯಿಕೊರಕ",
+      "mr": "गुलाबी बोंडअळी"
+    },
+    "weather": {
+      "tmin": 20,
+      "tmax": 35,
+      "rh_min": 55
+    },
+    "cultural": [
+      "C_RESIDUE",
+      "C_CLIP_SHOOTS",
+      "C_MONITOR"
+    ],
+    "biological": [
+      "B_PHEROMONE",
+      "B_TRICHOGRAMMA",
+      "B_NSKE"
+    ],
+    "chemical": [
+      {
+        "chem": "Profenofos 50% EC",
+        "dose": "2 ml/L",
+        "phi": 21
+      },
+      {
+        "chem": "Emamectin benzoate 5% SG",
+        "dose": "0.4 g/L",
+        "phi": 14
+      }
+    ]
+  },
+  "helicoverpa": {
+    "crops": [
+      "tomato",
+      "cotton"
+    ],
+    "scientific": "Helicoverpa armigera",
+    "trap": "pheromone",
+    "unit": "moths/trap/day",
+    "etl": 5,
+    "window_days": 1,
+    "name": {
+      "en": "Fruit borer (Helicoverpa)",
+      "hi": "फल छेदक (हेलिकोवर्पा)",
+      "te": "కాయ తొలుచు పురుగు",
+      "ta": "காய்த்துளைப்பான் (Helicoverpa)",
+      "kn": "ಕಾಯಿಕೊರಕ (Helicoverpa)",
+      "mr": "फळ पोखरणारी अळी (Helicoverpa)"
+    },
+    "weather": {
+      "tmin": 20,
+      "tmax": 33,
+      "rh_min": 40
+    },
+    "cultural": [
+      "C_CLIP_SHOOTS",
+      "C_MONITOR"
+    ],
+    "biological": [
+      "B_PHEROMONE",
+      "B_TRICHOGRAMMA",
+      "B_BIRD_PERCH",
+      "B_NSKE"
+    ],
+    "chemical": [
+      {
+        "chem": "Chlorantraniliprole 18.5% SC",
+        "dose": "0.3 ml/L",
+        "phi": 3
+      }
+    ]
+  },
+  "brinjal_shoot_borer": {
+    "crops": [
+      "brinjal"
+    ],
+    "scientific": "Leucinodes orbonalis",
+    "trap": "pheromone",
+    "unit": "moths/trap/week",
+    "etl": 5,
+    "window_days": 7,
+    "name": {
+      "en": "Brinjal fruit & shoot borer",
+      "hi": "बैंगन फल एवं तना छेदक",
+      "te": "వంకాయ కాయ మరియు కొమ్మ తొలుచు పురుగు",
+      "ta": "கத்தரி தண்டு & காய்த்துளைப்பான்",
+      "kn": "ಬದನೆ ಕಾಯಿ ಮತ್ತು ಕುಡಿ ಕೊರಕ",
+      "mr": "वांग्यावरील शेंडा व फळ पोखरणारी अळी"
+    },
+    "weather": {
+      "tmin": 21,
+      "tmax": 34,
+      "rh_min": 60
+    },
+    "cultural": [
+      "C_CLIP_SHOOTS",
+      "C_NETS",
+      "C_MONITOR"
+    ],
+    "biological": [
+      "B_PHEROMONE",
+      "B_NSKE"
+    ],
+    "chemical": [
+      {
+        "chem": "Chlorantraniliprole 18.5% SC",
+        "dose": "0.4 ml/L",
+        "phi": 3
+      },
+      {
+        "chem": "Emamectin benzoate 5% SG",
+        "dose": "0.4 g/L",
+        "phi": 5
+      }
+    ]
+  },
+  "yellow_stem_borer": {
+    "crops": [
+      "rice"
+    ],
+    "scientific": "Scirpophaga incertulas",
+    "trap": "pheromone",
+    "unit": "moths/trap/week",
+    "etl": 25,
+    "window_days": 7,
+    "name": {
+      "en": "Yellow stem borer",
+      "hi": "पीला तना छेदक",
+      "te": "కాండం తొలుచు పురుగు",
+      "ta": "மஞ்சள் தண்டுத்துளைப்பான்",
+      "kn": "ಹಳದಿ ಕಾಂಡ ಕೊರಕ",
+      "mr": "पिवळा खोडकिडा"
+    },
+    "weather": {
+      "tmin": 22,
+      "tmax": 34,
+      "rh_min": 70
+    },
+    "cultural": [
+      "C_RESIDUE",
+      "C_BALANCED_N",
+      "C_MONITOR"
+    ],
+    "biological": [
+      "B_PHEROMONE",
+      "B_TRICHOGRAMMA",
+      "B_LIGHT_TRAP"
+    ],
+    "chemical": [
+      {
+        "chem": "Chlorantraniliprole 18.5% SC",
+        "dose": "0.3 ml/L",
+        "phi": 30
+      }
+    ]
+  },
+  "brown_planthopper": {
+    "crops": [
+      "rice"
+    ],
+    "scientific": "Nilaparvata lugens",
+    "trap": "visual",
+    "unit": "hoppers/hill",
+    "etl": 10,
+    "window_days": 1,
+    "name": {
+      "en": "Brown planthopper",
+      "hi": "भूरा फुदका",
+      "te": "సుడిదోమ",
+      "ta": "புகையான் (பழுப்புத் தத்துப்பூச்சி)",
+      "kn": "ಕಂದು ಜಿಗಿಹುಳು",
+      "mr": "तपकिरी तुडतुडे"
+    },
+    "weather": {
+      "tmin": 25,
+      "tmax": 32,
+      "rh_min": 80
+    },
+    "cultural": [
+      "C_AWD",
+      "C_BALANCED_N",
+      "C_MONITOR"
+    ],
+    "biological": [
+      "B_NATURAL_ENEMIES",
+      "B_LIGHT_TRAP"
+    ],
+    "chemical": [
+      {
+        "chem": "Pymetrozine 50% WG",
+        "dose": "0.6 g/L (spray at plant base)",
+        "phi": 14
+      }
+    ]
+  },
+  "whitefly": {
+    "crops": [
+      "cotton",
+      "tomato",
+      "brinjal"
+    ],
+    "scientific": "Bemisia tabaci",
+    "trap": "yellow_sticky",
+    "unit": "adults/leaf",
+    "etl": 8,
+    "window_days": 1,
+    "name": {
+      "en": "Whitefly",
+      "hi": "सफेद मक्खी",
+      "te": "తెల్లదోమ",
+      "ta": "வெள்ளை ஈ",
+      "kn": "ಬಿಳಿ ನೊಣ",
+      "mr": "पांढरी माशी"
+    },
+    "weather": {
+      "tmin": 26,
+      "tmax": 36,
+      "rh_max": 60
+    },
+    "cultural": [
+      "C_WEEDS",
+      "C_BALANCED_N",
+      "C_MONITOR"
+    ],
+    "biological": [
+      "B_YST",
+      "B_NEEM",
+      "B_NATURAL_ENEMIES"
+    ],
+    "chemical": [
+      {
+        "chem": "Diafenthiuron 50% WP",
+        "dose": "1.2 g/L",
+        "phi": 7
+      },
+      {
+        "chem": "Spiromesifen 22.9% SC",
+        "dose": "0.8 ml/L",
+        "phi": 7
+      }
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{% macro level_badge(level) -%}
+<span class="badge lvl-{{ level }}">{{ t('level.' ~ level) }}</span>
+{%- endmacro %}
+
+{% macro status_badge(status) -%}
+<span class="badge st-{{ status }}">{{ t('status.' ~ status) }}</span>
+{%- endmacro %}
+
+{% macro meter(score, level) -%}
+<div class="meter"><span class="bg-{{ level }}" style="width: {{ [score, 3]|max }}%"></span></div>
+{%- endmacro %}
+
+{% macro advisory(adv, speech='') %}
+  {% if adv.type == 'background' %}
+    <div class="notice">{{ t('adv.no_leaf') }}</div>
+  {% else %}
+  {% if speech %}
+    <div class="row no-print" style="margin-bottom:6px">
+      <button class="btn small speak" type="button" onclick="speak({{ speech|tojson }}, '{{ speech_lang }}')">🔊 {{ t('adv.listen') }}</button>
+      <button class="btn small secondary" type="button" onclick="speechSynthesis.cancel()">⏹</button>
+      <button class="btn small secondary" type="button" onclick="window.print()">🖨 {{ t('adv.print') }}</button>
+    </div>
+  {% endif %}
+  {% if adv.notifiable %}<div class="notice red">⚠ {{ t('adv.notifiable') }}</div>{% endif %}
+  {% if adv.cultural %}
+    <div class="adv-sec"><h3>🌱 {{ t('adv.cultural') }}</h3><ul>{% for a in adv.cultural %}<li>{{ a }}</li>{% endfor %}</ul></div>
+  {% endif %}
+  {% if adv.biological %}
+    <div class="adv-sec bio"><h3>🐞 {{ t('adv.biological') }}</h3><ul>{% for a in adv.biological %}<li>{{ a }}</li>{% endfor %}</ul></div>
+  {% endif %}
+  {% if adv.chemical %}
+    <div class="adv-sec chem"><h3>🧪 {{ t('adv.chemical') }}</h3><ul>{% for a in adv.chemical %}<li>{{ a }}</li>{% endfor %}</ul></div>
+  {% endif %}
+  {% if adv.safety %}
+    <div class="adv-sec safe"><h3>🦺 {{ t('adv.safety') }}</h3><ul>{% for a in adv.safety %}<li>{{ a }}</li>{% endfor %}</ul></div>
+  {% endif %}
+  {% if adv.referral %}
+    <div class="adv-sec ref"><h3>🏥 {{ t('adv.referral') }}</h3><ul>{% for a in adv.referral %}<li>{{ a }}</li>{% endfor %}</ul></div>
+  {% endif %}
+  {% if adv.followup %}
+    <div class="adv-sec fu"><h3>📅 {{ t('adv.followup') }}</h3><ul>{% for a in adv.followup %}<li>{{ a }}</li>{% endfor %}</ul></div>
+  {% endif %}
+  {% if adv.chemical %}<p class="hint">{{ t('adv.disclaimer') }}</p>{% endif %}
+  {% endif %}
+{% endmacro %}
+
+{% macro alert_icon(kind, level) -%}
+{% set icons = {'weather':'🌦','hotspot':'📍','trap':'🪤','followup':'📅','validation':'✅','worse':'⚠','newreport':'📷'} %}
+<span class="ic lvl-{{ level or 'low' }}">{{ icons.get(kind, '🔔') }}</span>
+{%- endmacro %}

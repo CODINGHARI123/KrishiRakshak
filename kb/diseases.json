@@ -1,0 +1,1083 @@
+{
+  "Apple___Apple_scab": {
+    "crop": "apple",
+    "type": "fungal",
+    "pathogen": "Venturia inaequalis",
+    "model": "apple_scab",
+    "spread": "fast",
+    "name": {
+      "en": "Apple scab",
+      "hi": "सेब का स्कैब (पपड़ी रोग)",
+      "te": "ఆపిల్ స్కాబ్",
+      "ta": "ஆப்பிள் சொறி நோய்",
+      "kn": "ಸೇಬಿನ ಹುರುಪು ರೋಗ",
+      "mr": "सफरचंद खपली रोग"
+    },
+    "symptoms": "Olive-green to dark velvety spots on leaves and fruits; leaves curl and drop early.",
+    "cultural": [
+      "C_ORCHARD_SANIT",
+      "C_SPACING",
+      "C_RESISTANT"
+    ],
+    "biological": [
+      "B_BACILLUS"
+    ],
+    "chemical": [
+      {
+        "chem": "Captan 50% WP",
+        "dose": "2.5 g/L",
+        "phi": 7
+      },
+      {
+        "chem": "Difenoconazole 25% EC",
+        "dose": "0.5 ml/L",
+        "phi": 14
+      }
+    ]
+  },
+  "Apple___Black_rot": {
+    "crop": "apple",
+    "type": "fungal",
+    "pathogen": "Botryosphaeria obtusa",
+    "model": "black_rot",
+    "spread": "normal",
+    "name": {
+      "en": "Black rot",
+      "hi": "काला सड़न",
+      "te": "నల్ల కుళ్లు తెగులు",
+      "ta": "கருப்பு அழுகல் நோய்",
+      "kn": "ಕಪ್ಪು ಕೊಳೆ ರೋಗ",
+      "mr": "काळी कूज"
+    },
+    "symptoms": "Purple 'frog-eye' leaf spots with tan centres; rotting fruit with dark rings; branch cankers.",
+    "cultural": [
+      "C_PRUNE_CANKER",
+      "C_ORCHARD_SANIT",
+      "C_SPACING"
+    ],
+    "biological": [
+      "B_TRICHO"
+    ],
+    "chemical": [
+      {
+        "chem": "Captan 50% WP",
+        "dose": "2.5 g/L",
+        "phi": 7
+      }
+    ]
+  },
+  "Apple___Cedar_apple_rust": {
+    "crop": "apple",
+    "type": "fungal",
+    "pathogen": "Gymnosporangium juniperi-virginianae",
+    "model": "rust",
+    "spread": "normal",
+    "name": {
+      "en": "Cedar apple rust",
+      "hi": "सीडर एप्पल रस्ट (गेरुई)",
+      "te": "సెడార్ ఆపిల్ తుప్పు తెగులు",
+      "ta": "சீடர் ஆப்பிள் துரு நோய்",
+      "kn": "ಸೀಡರ್ ಸೇಬು ತುಕ್ಕು ರೋಗ",
+      "mr": "सिडार सफरचंद तांबेरा"
+    },
+    "symptoms": "Bright yellow-orange spots on upper leaf surface, later with tube-like structures below.",
+    "cultural": [
+      "C_WEEDS",
+      "C_RESISTANT",
+      "C_REMOVE"
+    ],
+    "biological": [
+      "B_BACILLUS"
+    ],
+    "chemical": [
+      {
+        "chem": "Hexaconazole 5% EC",
+        "dose": "2 ml/L",
+        "phi": 21
+      }
+    ]
+  },
+  "Apple___healthy": {
+    "crop": "apple",
+    "type": "healthy",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "Healthy",
+      "hi": "स्वस्थ",
+      "te": "ఆరోగ్యంగా ఉంది",
+      "ta": "ஆரோக்கியமானது",
+      "kn": "ಆರೋಗ್ಯಕರ",
+      "mr": "निरोगी"
+    }
+  },
+  "Blueberry___healthy": {
+    "crop": "blueberry",
+    "type": "healthy",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "Healthy",
+      "hi": "स्वस्थ",
+      "te": "ఆరోగ్యంగా ఉంది",
+      "ta": "ஆரோக்கியமானது",
+      "kn": "ಆರೋಗ್ಯಕರ",
+      "mr": "निरोगी"
+    }
+  },
+  "Cherry___Powdery_mildew": {
+    "crop": "cherry",
+    "type": "fungal",
+    "pathogen": "Podosphaera clandestina",
+    "model": "powdery_mildew",
+    "spread": "fast",
+    "name": {
+      "en": "Powdery mildew",
+      "hi": "चूर्णिल आसिता (पाउडरी मिल्ड्यू)",
+      "te": "బూడిద తెగులు",
+      "ta": "சாம்பல் நோய்",
+      "kn": "ಬೂದಿ ರೋಗ",
+      "mr": "भुरी रोग"
+    },
+    "symptoms": "White powdery fungal growth on young leaves; leaves curl and become distorted.",
+    "cultural": [
+      "C_SPACING",
+      "C_BALANCED_N",
+      "C_REMOVE"
+    ],
+    "biological": [
+      "B_BACILLUS",
+      "B_NEEM"
+    ],
+    "chemical": [
+      {
+        "chem": "Wettable sulphur 80% WP",
+        "dose": "2.5 g/L (avoid above 32°C)",
+        "phi": 5
+      },
+      {
+        "chem": "Hexaconazole 5% EC",
+        "dose": "2 ml/L",
+        "phi": 21
+      }
+    ]
+  },
+  "Cherry___healthy": {
+    "crop": "cherry",
+    "type": "healthy",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "Healthy",
+      "hi": "स्वस्थ",
+      "te": "ఆరోగ్యంగా ఉంది",
+      "ta": "ஆரோக்கியமானது",
+      "kn": "ಆರೋಗ್ಯಕರ",
+      "mr": "निरोगी"
+    }
+  },
+  "Corn___Cercospora_leaf_spot Gray_leaf_spot": {
+    "crop": "corn",
+    "type": "fungal",
+    "pathogen": "Cercospora zeae-maydis",
+    "model": "gray_leaf_spot",
+    "spread": "normal",
+    "name": {
+      "en": "Gray leaf spot",
+      "hi": "धूसर पत्ती धब्बा",
+      "te": "బూడిద ఆకుమచ్చ తెగులు",
+      "ta": "சாம்பல் இலைப்புள்ளி நோய்",
+      "kn": "ಬೂದು ಎಲೆ ಚುಕ್ಕೆ ರೋಗ",
+      "mr": "करडे पानांवरील ठिपके"
+    },
+    "symptoms": "Long, narrow, rectangular grey-tan lesions running parallel to leaf veins.",
+    "cultural": [
+      "C_ROTATE",
+      "C_RESIDUE",
+      "C_RESISTANT"
+    ],
+    "biological": [
+      "B_TRICHO"
+    ],
+    "chemical": [
+      {
+        "chem": "Propiconazole 25% EC",
+        "dose": "1 ml/L",
+        "phi": 30
+      },
+      {
+        "chem": "Azoxystrobin 23% SC",
+        "dose": "1 ml/L",
+        "phi": 30
+      }
+    ]
+  },
+  "Corn___Common_rust": {
+    "crop": "corn",
+    "type": "fungal",
+    "pathogen": "Puccinia sorghi",
+    "model": "rust",
+    "spread": "fast",
+    "name": {
+      "en": "Common rust",
+      "hi": "सामान्य रतुआ",
+      "te": "తుప్పు తెగులు",
+      "ta": "பொதுவான துரு நோய்",
+      "kn": "ಸಾಮಾನ್ಯ ತುಕ್ಕು ರೋಗ",
+      "mr": "सामान्य तांबेरा"
+    },
+    "symptoms": "Small cinnamon-brown powdery pustules on both leaf surfaces.",
+    "cultural": [
+      "C_RESISTANT",
+      "C_RESIDUE",
+      "C_MONITOR"
+    ],
+    "biological": [
+      "B_BACILLUS"
+    ],
+    "chemical": [
+      {
+        "chem": "Propiconazole 25% EC",
+        "dose": "1 ml/L",
+        "phi": 30
+      },
+      {
+        "chem": "Mancozeb 75% WP",
+        "dose": "2.5 g/L",
+        "phi": 7
+      }
+    ]
+  },
+  "Corn___Northern_Leaf_Blight": {
+    "crop": "corn",
+    "type": "fungal",
+    "pathogen": "Exserohilum turcicum",
+    "model": "northern_leaf_blight",
+    "spread": "normal",
+    "name": {
+      "en": "Northern leaf blight",
+      "hi": "उत्तरी पत्ती झुलसा (टर्सिकम)",
+      "te": "ఉత్తర ఆకు ఎండు తెగులు",
+      "ta": "வடக்கு இலைக் கருகல் நோய்",
+      "kn": "ಉತ್ತರ ಎಲೆ ಅಂಗಮಾರಿ ರೋಗ",
+      "mr": "उत्तरी पान करपा"
+    },
+    "symptoms": "Long cigar-shaped grey-green to tan lesions (2.5–15 cm) on leaves.",
+    "cultural": [
+      "C_ROTATE",
+      "C_RESIDUE",
+      "C_RESISTANT"
+    ],
+    "biological": [
+      "B_TRICHO",
+      "B_PSEUDO"
+    ],
+    "chemical": [
+      {
+        "chem": "Mancozeb 75% WP",
+        "dose": "2.5 g/L",
+        "phi": 7
+      },
+      {
+        "chem": "Propiconazole 25% EC",
+        "dose": "1 ml/L",
+        "phi": 30
+      }
+    ]
+  },
+  "Corn___healthy": {
+    "crop": "corn",
+    "type": "healthy",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "Healthy",
+      "hi": "स्वस्थ",
+      "te": "ఆరోగ్యంగా ఉంది",
+      "ta": "ஆரோக்கியமானது",
+      "kn": "ಆರೋಗ್ಯಕರ",
+      "mr": "निरोगी"
+    }
+  },
+  "Grape___Black_rot": {
+    "crop": "grape",
+    "type": "fungal",
+    "pathogen": "Guignardia bidwellii",
+    "model": "black_rot",
+    "spread": "fast",
+    "name": {
+      "en": "Black rot",
+      "hi": "काला सड़न",
+      "te": "నల్ల కుళ్లు తెగులు",
+      "ta": "கருப்பு அழுகல் நோய்",
+      "kn": "ಕಪ್ಪು ಕೊಳೆ ರೋಗ",
+      "mr": "काळी कूज"
+    },
+    "symptoms": "Brown circular leaf spots with dark borders; berries shrivel into hard black mummies.",
+    "cultural": [
+      "C_ORCHARD_SANIT",
+      "C_SPACING",
+      "C_REMOVE"
+    ],
+    "biological": [
+      "B_BACILLUS"
+    ],
+    "chemical": [
+      {
+        "chem": "Mancozeb 75% WP",
+        "dose": "2 g/L",
+        "phi": 66
+      },
+      {
+        "chem": "Difenoconazole 25% EC",
+        "dose": "0.5 ml/L",
+        "phi": 30
+      }
+    ]
+  },
+  "Grape___Esca_(Black_Measles)": {
+    "crop": "grape",
+    "type": "fungal",
+    "pathogen": "Phaeomoniella / Phaeoacremonium spp. (trunk disease complex)",
+    "model": "none",
+    "spread": "normal",
+    "referral": true,
+    "name": {
+      "en": "Esca (Black measles)",
+      "hi": "एस्का (ब्लैक मीज़ल्स)",
+      "te": "ఎస్కా (నల్ల మచ్చల తెగులు)",
+      "ta": "எஸ்கா (கருப்புத் தட்டம்மை)",
+      "kn": "ಎಸ್ಕಾ (ಕಪ್ಪು ಚುಕ್ಕೆ ರೋಗ)",
+      "mr": "एस्का (काळे गोवर)"
+    },
+    "symptoms": "Tiger-stripe yellow/red patches between leaf veins; dark spots on berries; wood decay.",
+    "cultural": [
+      "C_PRUNE_CANKER",
+      "C_TOOLS",
+      "C_ROGUE"
+    ],
+    "biological": [
+      "B_TRICHO"
+    ],
+    "chemical": []
+  },
+  "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)": {
+    "crop": "grape",
+    "type": "fungal",
+    "pathogen": "Pseudocercospora vitis (Isariopsis clavispora)",
+    "model": "leaf_spot_humid",
+    "spread": "normal",
+    "name": {
+      "en": "Leaf blight (Isariopsis leaf spot)",
+      "hi": "पत्ती झुलसा (आइसैरियोप्सिस)",
+      "te": "ఆకు ఎండు తెగులు (ఐసారియోప్సిస్)",
+      "ta": "இலைக் கருகல் நோய் (Isariopsis இலைப்புள்ளி)",
+      "kn": "ಎಲೆ ಅಂಗಮಾರಿ ರೋಗ (Isariopsis ಎಲೆ ಚುಕ್ಕೆ)",
+      "mr": "पान करपा (Isariopsis पानांवरील ठिपके)"
+    },
+    "symptoms": "Irregular dark brown to black spots on older leaves that later dry and fall.",
+    "cultural": [
+      "C_REMOVE",
+      "C_SPACING"
+    ],
+    "biological": [
+      "B_TRICHO"
+    ],
+    "chemical": [
+      {
+        "chem": "Mancozeb 75% WP",
+        "dose": "2 g/L",
+        "phi": 66
+      },
+      {
+        "chem": "Copper oxychloride 50% WP",
+        "dose": "3 g/L",
+        "phi": 15
+      }
+    ]
+  },
+  "Grape___healthy": {
+    "crop": "grape",
+    "type": "healthy",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "Healthy",
+      "hi": "स्वस्थ",
+      "te": "ఆరోగ్యంగా ఉంది",
+      "ta": "ஆரோக்கியமானது",
+      "kn": "ಆರೋಗ್ಯಕರ",
+      "mr": "निरोगी"
+    }
+  },
+  "Orange___Haunglongbing_(Citrus_greening)": {
+    "crop": "orange",
+    "type": "bacterial",
+    "pathogen": "Candidatus Liberibacter asiaticus (spread by Asian citrus psyllid)",
+    "model": "vector_hot_dry",
+    "spread": "fast",
+    "referral": true,
+    "notifiable": true,
+    "name": {
+      "en": "Citrus greening (HLB)",
+      "hi": "सिट्रस ग्रीनिंग (हुआंगलोंगबिंग)",
+      "te": "సిట్రస్ గ్రీనింగ్ (HLB)",
+      "ta": "சிட்ரஸ் பசுமை நோய் (HLB)",
+      "kn": "ಸಿಟ್ರಸ್ ಗ್ರೀನಿಂಗ್ ರೋಗ (HLB)",
+      "mr": "सिट्रस ग्रीनिंग (HLB)"
+    },
+    "symptoms": "Blotchy asymmetric yellow mottling of leaves; small, lopsided, bitter fruits; twig dieback.",
+    "cultural": [
+      "C_ROGUE",
+      "C_CERT_NURSERY",
+      "C_QUARANTINE"
+    ],
+    "biological": [
+      "B_NEEM",
+      "B_YST"
+    ],
+    "chemical": [
+      {
+        "chem": "Thiamethoxam 25% WG (psyllid control)",
+        "dose": "0.3 g/L",
+        "phi": 30
+      }
+    ]
+  },
+  "Peach___Bacterial_spot": {
+    "crop": "peach",
+    "type": "bacterial",
+    "pathogen": "Xanthomonas arboricola pv. pruni",
+    "model": "bacterial",
+    "spread": "fast",
+    "name": {
+      "en": "Bacterial spot",
+      "hi": "जीवाणु धब्बा रोग",
+      "te": "బ్యాక్టీరియా ఆకుమచ్చ తెగులు",
+      "ta": "பாக்டீரியா புள்ளி நோய்",
+      "kn": "ಬ್ಯಾಕ್ಟೀರಿಯಾ ಚುಕ್ಕೆ ರೋಗ",
+      "mr": "जिवाणूजन्य ठिपके"
+    },
+    "symptoms": "Small water-soaked angular spots that turn purple-black; 'shot-holes' in leaves; pitted fruit.",
+    "cultural": [
+      "C_RESISTANT",
+      "C_BALANCED_N",
+      "C_PRUNE_CANKER"
+    ],
+    "biological": [
+      "B_PSEUDO",
+      "B_BACILLUS"
+    ],
+    "chemical": [
+      {
+        "chem": "Copper hydroxide 53.8% DF",
+        "dose": "2 g/L",
+        "phi": 10
+      }
+    ]
+  },
+  "Peach___healthy": {
+    "crop": "peach",
+    "type": "healthy",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "Healthy",
+      "hi": "स्वस्थ",
+      "te": "ఆరోగ్యంగా ఉంది",
+      "ta": "ஆரோக்கியமானது",
+      "kn": "ಆರೋಗ್ಯಕರ",
+      "mr": "निरोगी"
+    }
+  },
+  "Pepper,_bell___Bacterial_spot": {
+    "crop": "pepper",
+    "type": "bacterial",
+    "pathogen": "Xanthomonas campestris pv. vesicatoria",
+    "model": "bacterial",
+    "spread": "fast",
+    "name": {
+      "en": "Bacterial spot",
+      "hi": "जीवाणु धब्बा रोग",
+      "te": "బ్యాక్టీరియా ఆకుమచ్చ తెగులు",
+      "ta": "பாக்டீரியா புள்ளி நோய்",
+      "kn": "ಬ್ಯಾಕ್ಟೀರಿಯಾ ಚುಕ್ಕೆ ರೋಗ",
+      "mr": "जिवाणूजन्य ठिपके"
+    },
+    "symptoms": "Small water-soaked spots turning brown with yellow halo; leaf drop; raised scabby spots on fruit.",
+    "cultural": [
+      "C_RESISTANT",
+      "C_NO_OVERHEAD",
+      "C_ROTATE",
+      "C_TOOLS"
+    ],
+    "biological": [
+      "B_PSEUDO",
+      "B_BACILLUS"
+    ],
+    "chemical": [
+      {
+        "chem": "Copper hydroxide 53.8% DF",
+        "dose": "2 g/L",
+        "phi": 5
+      },
+      {
+        "chem": "Copper oxychloride 50% WP",
+        "dose": "3 g/L",
+        "phi": 5
+      }
+    ]
+  },
+  "Pepper,_bell___healthy": {
+    "crop": "pepper",
+    "type": "healthy",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "Healthy",
+      "hi": "स्वस्थ",
+      "te": "ఆరోగ్యంగా ఉంది",
+      "ta": "ஆரோக்கியமானது",
+      "kn": "ಆರೋಗ್ಯಕರ",
+      "mr": "निरोगी"
+    }
+  },
+  "Potato___Early_blight": {
+    "crop": "potato",
+    "type": "fungal",
+    "pathogen": "Alternaria solani",
+    "model": "early_blight",
+    "spread": "normal",
+    "name": {
+      "en": "Early blight",
+      "hi": "अगेती झुलसा",
+      "te": "ముందస్తు ఆకు ఎండు తెగులు",
+      "ta": "முன் கருகல் நோய்",
+      "kn": "ಮುಂಚಿನ ಅಂಗಮಾರಿ ರೋಗ",
+      "mr": "लवकर येणारा करपा"
+    },
+    "symptoms": "Dark brown spots with concentric 'target' rings on older leaves, surrounded by yellowing.",
+    "cultural": [
+      "C_ROTATE",
+      "C_BALANCED_N",
+      "C_REMOVE",
+      "C_MULCH"
+    ],
+    "biological": [
+      "B_TRICHO",
+      "B_PSEUDO"
+    ],
+    "chemical": [
+      {
+        "chem": "Mancozeb 75% WP",
+        "dose": "2.5 g/L",
+        "phi": 7
+      },
+      {
+        "chem": "Azoxystrobin 23% SC",
+        "dose": "1 ml/L",
+        "phi": 7
+      }
+    ]
+  },
+  "Potato___Late_blight": {
+    "crop": "potato",
+    "type": "oomycete",
+    "pathogen": "Phytophthora infestans",
+    "model": "late_blight",
+    "spread": "fast",
+    "name": {
+      "en": "Late blight",
+      "hi": "पछेती झुलसा",
+      "te": "ఆలస్యపు ఆకు ఎండు తెగులు",
+      "ta": "பின் கருகல் நோய்",
+      "kn": "ತಡ ಅಂಗಮಾರಿ ರೋಗ",
+      "mr": "उशिरा येणारा करपा"
+    },
+    "symptoms": "Water-soaked pale-green patches turning brown-black; white mould on leaf underside in humid weather; can destroy the field within days.",
+    "cultural": [
+      "C_REMOVE",
+      "C_DRAINAGE",
+      "C_CERT_NURSERY",
+      "C_RESISTANT"
+    ],
+    "biological": [
+      "B_TRICHO"
+    ],
+    "chemical": [
+      {
+        "chem": "Metalaxyl 8% + Mancozeb 64% WP",
+        "dose": "2.5 g/L",
+        "phi": 7
+      },
+      {
+        "chem": "Cymoxanil 8% + Mancozeb 64% WP",
+        "dose": "3 g/L",
+        "phi": 7
+      }
+    ]
+  },
+  "Potato___healthy": {
+    "crop": "potato",
+    "type": "healthy",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "Healthy",
+      "hi": "स्वस्थ",
+      "te": "ఆరోగ్యంగా ఉంది",
+      "ta": "ஆரோக்கியமானது",
+      "kn": "ಆರೋಗ್ಯಕರ",
+      "mr": "निरोगी"
+    }
+  },
+  "Raspberry___healthy": {
+    "crop": "raspberry",
+    "type": "healthy",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "Healthy",
+      "hi": "स्वस्थ",
+      "te": "ఆరోగ్యంగా ఉంది",
+      "ta": "ஆரோக்கியமானது",
+      "kn": "ಆರೋಗ್ಯಕರ",
+      "mr": "निरोगी"
+    }
+  },
+  "Soybean___healthy": {
+    "crop": "soybean",
+    "type": "healthy",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "Healthy",
+      "hi": "स्वस्थ",
+      "te": "ఆరోగ్యంగా ఉంది",
+      "ta": "ஆரோக்கியமானது",
+      "kn": "ಆರೋಗ್ಯಕರ",
+      "mr": "निरोगी"
+    }
+  },
+  "Squash___Powdery_mildew": {
+    "crop": "squash",
+    "type": "fungal",
+    "pathogen": "Podosphaera xanthii / Erysiphe cichoracearum",
+    "model": "powdery_mildew",
+    "spread": "fast",
+    "name": {
+      "en": "Powdery mildew",
+      "hi": "चूर्णिल आसिता (पाउडरी मिल्ड्यू)",
+      "te": "బూడిద తెగులు",
+      "ta": "சாம்பல் நோய்",
+      "kn": "ಬೂದಿ ರೋಗ",
+      "mr": "भुरी रोग"
+    },
+    "symptoms": "White talcum-like powder on upper leaf surface and stems; leaves yellow and dry.",
+    "cultural": [
+      "C_SPACING",
+      "C_REMOVE",
+      "C_BALANCED_N"
+    ],
+    "biological": [
+      "B_BACILLUS",
+      "B_NEEM"
+    ],
+    "chemical": [
+      {
+        "chem": "Wettable sulphur 80% WP",
+        "dose": "2 g/L (avoid above 32°C)",
+        "phi": 3
+      },
+      {
+        "chem": "Hexaconazole 5% EC",
+        "dose": "1 ml/L",
+        "phi": 5
+      }
+    ]
+  },
+  "Strawberry___Leaf_scorch": {
+    "crop": "strawberry",
+    "type": "fungal",
+    "pathogen": "Diplocarpon earlianum",
+    "model": "leaf_spot_humid",
+    "spread": "normal",
+    "name": {
+      "en": "Leaf scorch",
+      "hi": "पत्ती झुलसन",
+      "te": "ఆకు మాడు తెగులు",
+      "ta": "இலைக் கருகல்",
+      "kn": "ಎಲೆ ಸುಡು ರೋಗ",
+      "mr": "पाने करपणे"
+    },
+    "symptoms": "Many small irregular purple spots that merge; leaf edges look burnt ('scorched').",
+    "cultural": [
+      "C_REMOVE",
+      "C_NO_OVERHEAD",
+      "C_SPACING",
+      "C_CERT_NURSERY"
+    ],
+    "biological": [
+      "B_TRICHO"
+    ],
+    "chemical": [
+      {
+        "chem": "Captan 50% WP",
+        "dose": "2 g/L",
+        "phi": 1
+      }
+    ]
+  },
+  "Strawberry___healthy": {
+    "crop": "strawberry",
+    "type": "healthy",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "Healthy",
+      "hi": "स्वस्थ",
+      "te": "ఆరోగ్యంగా ఉంది",
+      "ta": "ஆரோக்கியமானது",
+      "kn": "ಆರೋಗ್ಯಕರ",
+      "mr": "निरोगी"
+    }
+  },
+  "Tomato___Bacterial_spot": {
+    "crop": "tomato",
+    "type": "bacterial",
+    "pathogen": "Xanthomonas spp.",
+    "model": "bacterial",
+    "spread": "fast",
+    "name": {
+      "en": "Bacterial spot",
+      "hi": "जीवाणु धब्बा रोग",
+      "te": "బ్యాక్టీరియా ఆకుమచ్చ తెగులు",
+      "ta": "பாக்டீரியா புள்ளி நோய்",
+      "kn": "ಬ್ಯಾಕ್ಟೀರಿಯಾ ಚುಕ್ಕೆ ರೋಗ",
+      "mr": "जिवाणूजन्य ठिपके"
+    },
+    "symptoms": "Small dark water-soaked spots with yellow halo on leaves; scabby spots on fruit.",
+    "cultural": [
+      "C_CERT_NURSERY",
+      "C_NO_OVERHEAD",
+      "C_ROTATE",
+      "C_TOOLS"
+    ],
+    "biological": [
+      "B_PSEUDO",
+      "B_BACILLUS"
+    ],
+    "chemical": [
+      {
+        "chem": "Copper hydroxide 53.8% DF",
+        "dose": "2 g/L",
+        "phi": 5
+      }
+    ]
+  },
+  "Tomato___Early_blight": {
+    "crop": "tomato",
+    "type": "fungal",
+    "pathogen": "Alternaria solani",
+    "model": "early_blight",
+    "spread": "normal",
+    "name": {
+      "en": "Early blight",
+      "hi": "अगेती झुलसा",
+      "te": "ముందస్తు ఆకు ఎండు తెగులు",
+      "ta": "முன் கருகல் நோய்",
+      "kn": "ಮುಂಚಿನ ಅಂಗಮಾರಿ ರೋಗ",
+      "mr": "लवकर येणारा करपा"
+    },
+    "symptoms": "Brown spots with concentric rings (target board) on lower leaves; stem and fruit lesions near calyx.",
+    "cultural": [
+      "C_REMOVE",
+      "C_MULCH",
+      "C_ROTATE",
+      "C_BALANCED_N"
+    ],
+    "biological": [
+      "B_TRICHO",
+      "B_PSEUDO"
+    ],
+    "chemical": [
+      {
+        "chem": "Mancozeb 75% WP",
+        "dose": "2.5 g/L",
+        "phi": 3
+      },
+      {
+        "chem": "Azoxystrobin 23% SC",
+        "dose": "1 ml/L",
+        "phi": 5
+      }
+    ]
+  },
+  "Tomato___Late_blight": {
+    "crop": "tomato",
+    "type": "oomycete",
+    "pathogen": "Phytophthora infestans",
+    "model": "late_blight",
+    "spread": "fast",
+    "name": {
+      "en": "Late blight",
+      "hi": "पछेती झुलसा",
+      "te": "ఆలస్యపు ఆకు ఎండు తెగులు",
+      "ta": "பின் கருகல் நோய்",
+      "kn": "ತಡ ಅಂಗಮಾರಿ ರೋಗ",
+      "mr": "उशिरा येणारा करपा"
+    },
+    "symptoms": "Large greasy grey-green to brown blotches; white mould under leaves; firm brown rot on fruits.",
+    "cultural": [
+      "C_REMOVE",
+      "C_DRAINAGE",
+      "C_NO_OVERHEAD",
+      "C_SPACING"
+    ],
+    "biological": [
+      "B_TRICHO"
+    ],
+    "chemical": [
+      {
+        "chem": "Metalaxyl 8% + Mancozeb 64% WP",
+        "dose": "2.5 g/L",
+        "phi": 5
+      },
+      {
+        "chem": "Cymoxanil 8% + Mancozeb 64% WP",
+        "dose": "3 g/L",
+        "phi": 5
+      }
+    ]
+  },
+  "Tomato___Leaf_Mold": {
+    "crop": "tomato",
+    "type": "fungal",
+    "pathogen": "Passalora fulva (Cladosporium fulvum)",
+    "model": "leaf_spot_humid",
+    "spread": "normal",
+    "name": {
+      "en": "Leaf mould",
+      "hi": "पत्ती फफूंद",
+      "te": "ఆకు బూజు తెగులు",
+      "ta": "இலைப் பூஞ்சண நோய்",
+      "kn": "ಎಲೆ ಬೂಷ್ಟು ರೋಗ",
+      "mr": "पानांवरील बुरशी"
+    },
+    "symptoms": "Pale yellow patches on upper leaf surface with olive-green velvety mould below; common in polyhouses.",
+    "cultural": [
+      "C_SPACING",
+      "C_NO_OVERHEAD",
+      "C_REMOVE"
+    ],
+    "biological": [
+      "B_TRICHO",
+      "B_BACILLUS"
+    ],
+    "chemical": [
+      {
+        "chem": "Chlorothalonil 75% WP",
+        "dose": "2 g/L",
+        "phi": 3
+      }
+    ]
+  },
+  "Tomato___Septoria_leaf_spot": {
+    "crop": "tomato",
+    "type": "fungal",
+    "pathogen": "Septoria lycopersici",
+    "model": "leaf_spot_humid",
+    "spread": "normal",
+    "name": {
+      "en": "Septoria leaf spot",
+      "hi": "सेप्टोरिया पत्ती धब्बा",
+      "te": "సెప్టోరియా ఆకుమచ్చ",
+      "ta": "செப்டோரியா இலைப்புள்ளி நோய்",
+      "kn": "ಸೆಪ್ಟೋರಿಯಾ ಎಲೆ ಚುಕ್ಕೆ ರೋಗ",
+      "mr": "सेप्टोरिया पानांवरील ठिपके"
+    },
+    "symptoms": "Many small circular spots with dark borders and grey centres with tiny black dots on lower leaves.",
+    "cultural": [
+      "C_REMOVE",
+      "C_MULCH",
+      "C_ROTATE",
+      "C_NO_OVERHEAD"
+    ],
+    "biological": [
+      "B_TRICHO"
+    ],
+    "chemical": [
+      {
+        "chem": "Mancozeb 75% WP",
+        "dose": "2.5 g/L",
+        "phi": 3
+      },
+      {
+        "chem": "Chlorothalonil 75% WP",
+        "dose": "2 g/L",
+        "phi": 3
+      }
+    ]
+  },
+  "Tomato___Spider_mites Two-spotted_spider_mite": {
+    "crop": "tomato",
+    "type": "pest",
+    "pathogen": "Tetranychus urticae (two-spotted spider mite)",
+    "model": "mites_hot_dry",
+    "spread": "fast",
+    "name": {
+      "en": "Two-spotted spider mite",
+      "hi": "लाल मकड़ी (दो धब्बेदार माइट)",
+      "te": "ఎర్ర నల్లి",
+      "ta": "இரு புள்ளி சிலந்திப் பேன்",
+      "kn": "ಎರಡು ಚುಕ್ಕೆಯ ಜೇಡ ನುಸಿ",
+      "mr": "दोन ठिपक्यांचा लाल कोळी"
+    },
+    "symptoms": "Fine yellow speckling (stippling) on leaves, fine webbing on the underside; leaves turn bronze and dry.",
+    "cultural": [
+      "C_WATER_SPRAY",
+      "C_WEEDS",
+      "C_MONITOR"
+    ],
+    "biological": [
+      "B_NATURAL_ENEMIES",
+      "B_NEEM"
+    ],
+    "chemical": [
+      {
+        "chem": "Fenazaquin 10% EC",
+        "dose": "2 ml/L",
+        "phi": 7
+      },
+      {
+        "chem": "Wettable sulphur 80% WP",
+        "dose": "2.5 g/L (avoid above 32°C)",
+        "phi": 3
+      }
+    ]
+  },
+  "Tomato___Target_Spot": {
+    "crop": "tomato",
+    "type": "fungal",
+    "pathogen": "Corynespora cassiicola",
+    "model": "leaf_spot_humid",
+    "spread": "normal",
+    "name": {
+      "en": "Target spot",
+      "hi": "टारगेट स्पॉट",
+      "te": "టార్గెట్ మచ్చ తెగులు",
+      "ta": "இலக்குப் புள்ளி நோய்",
+      "kn": "ಗುರಿ ಚುಕ್ಕೆ ರೋಗ",
+      "mr": "टार्गेट स्पॉट (वर्तुळाकार ठिपके)"
+    },
+    "symptoms": "Brown spots with light centres and concentric rings; lesions merge and leaves fall.",
+    "cultural": [
+      "C_REMOVE",
+      "C_SPACING",
+      "C_ROTATE"
+    ],
+    "biological": [
+      "B_TRICHO",
+      "B_BACILLUS"
+    ],
+    "chemical": [
+      {
+        "chem": "Azoxystrobin 23% SC",
+        "dose": "1 ml/L",
+        "phi": 5
+      },
+      {
+        "chem": "Chlorothalonil 75% WP",
+        "dose": "2 g/L",
+        "phi": 3
+      }
+    ]
+  },
+  "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+    "crop": "tomato",
+    "type": "viral",
+    "pathogen": "Tomato yellow leaf curl virus (spread by whitefly Bemisia tabaci)",
+    "model": "vector_hot_dry",
+    "spread": "fast",
+    "referral": true,
+    "name": {
+      "en": "Yellow leaf curl virus",
+      "hi": "पीत पत्ती मोड़क विषाणु (TYLCV)",
+      "te": "పసుపు ఆకు ముడత వైరస్",
+      "ta": "மஞ்சள் இலைச் சுருள் வைரஸ்",
+      "kn": "ಹಳದಿ ಎಲೆ ಮುರುಟು ವೈರಸ್ ರೋಗ",
+      "mr": "पिवळा पर्णगुच्छ (लीफ कर्ल) विषाणू"
+    },
+    "symptoms": "Upward curling and yellowing of leaf edges, small crinkled leaves, stunted bushy plants, flower drop.",
+    "cultural": [
+      "V_NO_CURE",
+      "C_ROGUE",
+      "C_NETS",
+      "C_WEEDS"
+    ],
+    "biological": [
+      "B_YST",
+      "B_NEEM"
+    ],
+    "chemical": [
+      {
+        "chem": "Diafenthiuron 50% WP (whitefly control)",
+        "dose": "1.2 g/L",
+        "phi": 7
+      }
+    ]
+  },
+  "Tomato___Tomato_mosaic_virus": {
+    "crop": "tomato",
+    "type": "viral",
+    "pathogen": "Tomato mosaic virus (mechanically transmitted)",
+    "model": "none",
+    "spread": "normal",
+    "referral": true,
+    "name": {
+      "en": "Mosaic virus",
+      "hi": "मोज़ेक विषाणु",
+      "te": "మొజాయిక్ వైరస్",
+      "ta": "தேமல் வைரஸ்",
+      "kn": "ಮೊಸಾಯಿಕ್ ವೈರಸ್ ರೋಗ",
+      "mr": "मोझॅक विषाणू"
+    },
+    "symptoms": "Light and dark green mosaic pattern on leaves; fern-like distorted leaves; uneven fruit ripening.",
+    "cultural": [
+      "V_NO_CURE",
+      "C_ROGUE",
+      "C_TOOLS",
+      "C_CERT_NURSERY"
+    ],
+    "biological": [],
+    "chemical": []
+  },
+  "Tomato___healthy": {
+    "crop": "tomato",
+    "type": "healthy",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "Healthy",
+      "hi": "स्वस्थ",
+      "te": "ఆరోగ్యంగా ఉంది",
+      "ta": "ஆரோக்கியமானது",
+      "kn": "ಆರೋಗ್ಯಕರ",
+      "mr": "निरोगी"
+    }
+  },
+  "Background_without_leaves": {
+    "crop": null,
+    "type": "background",
+    "model": "none",
+    "spread": "none",
+    "name": {
+      "en": "No leaf detected",
+      "hi": "पत्ती नहीं मिली",
+      "te": "ఆకు కనిపించలేదు",
+      "ta": "இலை கண்டறியப்படவில்லை",
+      "kn": "ಎಲೆ ಪತ್ತೆಯಾಗಿಲ್ಲ",
+      "mr": "पान आढळले नाही"
+    }
+  }
+}

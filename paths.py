@@ -6,9 +6,15 @@ new records reset whenever Vercel starts a fresh instance.
 """
 import os
 import shutil
+import time
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 IS_SERVERLESS = bool(os.environ.get("VERCEL") or os.environ.get("KRISHI_SERVERLESS"))
+
+# Timestamps are stored in Indian local time; cloud servers default to UTC.
+os.environ.setdefault("TZ", "Asia/Kolkata")
+if hasattr(time, "tzset"):
+    time.tzset()
 RUNTIME = "/tmp/krishirakshak" if IS_SERVERLESS else BASE
 
 BUNDLED_DB = os.path.join(BASE, "krishirakshak.db")

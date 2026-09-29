@@ -4,6 +4,7 @@ KrishiRakshak – AI-based crop health surveillance & advisory system.
 Run:  python app.py      then open http://localhost:5000 in Chrome.
 """
 import datetime as dt
+import re
 import functools
 import io
 import json
@@ -13,7 +14,7 @@ import threading
 import time
 import uuid
 
-from flask import (Flask, abort, flash, g, jsonify, redirect, render_template, request,
+from flask import (Flask, Response, abort, flash, g, jsonify, redirect, render_template, request,
                    send_from_directory, session, url_for)
 from PIL import Image
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -50,6 +51,7 @@ DEVICE_KEY = os.environ.get("KRISHI_DEVICE_KEY", "demo-device-key")
 app.teardown_appcontext(db.close_db)
 db.init_db()
 
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 LEVEL_ORDER = {"low": 0, "moderate": 1, "high": 2, "severe": 3}
 
 
@@ -86,7 +88,7 @@ def label_name(label, lang=None):
 def inject():
     unread = 0
     if g.get("user"):
-        unread = db.query("SELECT COUNT(*) c FROM alerts WHERE user_id=? AND is_read=0",
+        unread = db.query("SELECT COUNT(*) AS c FROM alerts WHERE user_id=? AND is_read=0",
                           (g.user["id"],), one=True)["c"]
     return dict(t=T, lang=g.lang, img_url=lambda p: url_for("media", name=os.path.basename(p or "")), LANGS=kb.LANGS, user=g.get("user"), unread=unread,
                 label_name=label_name, crop_name=lambda c: kb.crop_name(c, g.lang), risk_name=risk_name,
@@ -113,8 +115,9 @@ def is_staff():
 
 def add_alert(user_id, farm_id, kind, level, ref, detail="", dedupe_days=2):
     since = (dt.datetime.now() - dt.timedelta(days=dedupe_days)).strftime("%Y-%m-%d %H:%M:%S")
-    dup = db.query("SELECT id FROM alerts WHERE user_id=? AND IFNULL(farm_id,0)=IFNULL(?,0) AND kind=? AND ref=? "
-                   "AND created_at>=?", (user_id, farm_id, kind, ref, since), one=True)
+    farm_cond, farm_args = ("farm_id IS NULL", ()) if farm_id is None else ("farm_id=?", (farm_id,))
+    dup = db.query(f"SELECT id FROM alerts WHERE user_id=? AND {farm_cond} AND kind=? AND ref=? AND created_at>=?",
+                   (user_id, *farm_args, kind, ref, since), one=True)
     if not dup:
         db.execute("INSERT INTO alerts(user_id,farm_id,kind,level,ref,detail) VALUES (?,?,?,?,?,?)",
                    (user_id, farm_id, kind, level, ref, detail))
@@ -126,7 +129,7 @@ def staff_ids():
 
 def nearby_case_counts(lat, lon, km=10, days=21):
     since = (dt.datetime.now() - dt.timedelta(days=days)).strftime("%Y-%m-%d")
-    rows = db.query("SELECT lat, lon, COALESCE(final_label, ai_label) label FROM reports "
+    rows = db.query("SELECT lat, lon, COALESCE(final_label, ai_label) AS label FROM reports "
                     "WHERE status IN ('confirmed','corrected') AND created_at>=? AND lat IS NOT NULL", (since,))
     counts = {}
     for r in rows:
@@ -170,7 +173,7 @@ def nearest_lab(lat, lon, kind=None):
 def report_rows_for_hotspots(days=30):
     since = (dt.datetime.now() - dt.timedelta(days=days)).strftime("%Y-%m-%d")
     rows = db.query("SELECT id, lat, lon, district, created_at, status, ai_conf, "
-                    "COALESCE(final_label, ai_label) label FROM reports "
+                    "COALESCE(final_label, ai_label) AS label FROM reports "
                     "WHERE lat IS NOT NULL AND created_at>=? AND (status IN ('confirmed','corrected') "
                     "OR (status='pending' AND ai_conf>=0.9))", (since,))
     return [dict(r) for r in rows]
@@ -207,7 +210,7 @@ def surveillance_scan():
                 pass
         hotspot_alerts()
         today = dt.date.today().isoformat()
-        for fu in db.query("SELECT fu.*, r.user_id, r.farm_id, COALESCE(r.final_label, r.ai_label) label FROM followups fu "
+        for fu in db.query("SELECT fu.*, r.user_id, r.farm_id, COALESCE(r.final_label, r.ai_label) AS label FROM followups fu "
                            "JOIN reports r ON r.id=fu.report_id WHERE fu.status='due' AND fu.due_date<=?", (today,)):
             add_alert(fu["user_id"], fu["farm_id"], "followup", "moderate", fu["label"], str(fu["report_id"]), dedupe_days=1)
 
@@ -228,8 +231,8 @@ def index():
     if g.user:
         return redirect(url_for("officer_home" if is_staff() else "farmer_home"))
     stats = {
-        "reports": db.query("SELECT COUNT(*) c FROM reports", one=True)["c"],
-        "farms": db.query("SELECT COUNT(*) c FROM farms", one=True)["c"],
+        "reports": db.query("SELECT COUNT(*) AS c FROM reports", one=True)["c"],
+        "farms": db.query("SELECT COUNT(*) AS c FROM farms", one=True)["c"],
         "classes": len(kb.DISEASES) - 1,
         "hotspots": len(current_hotspots()),
     }
@@ -249,7 +252,8 @@ def set_lang(code):
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        u = db.query("SELECT * FROM users WHERE username=?", (request.form["username"].strip().lower(),), one=True)
+        ident = request.form.get("email", request.form.get("username", "")).strip().lower()
+        u = db.query("SELECT * FROM users WHERE email=? OR username=?", (ident, ident), one=True)
         if u and check_password_hash(u["password_hash"], request.form["password"]):
             session.clear()
             session["uid"] = u["id"]
@@ -272,19 +276,28 @@ def logout():
 def register():
     if request.method == "POST":
         f = request.form
-        username = f["username"].strip().lower()
-        if not username or len(f["password"]) < 6:
+        email = f.get("email", "").strip().lower()
+        name = f.get("name", "").strip()
+        pw = f.get("password", "")
+        if not name or not EMAIL_RE.match(email):
+            flash(T("register.bad_email"), "error")
+        elif len(pw) < 6:
             flash(T("register.invalid"), "error")
-        elif db.query("SELECT id FROM users WHERE username=?", (username,), one=True):
-            flash(T("register.taken"), "error")
+        elif pw != f.get("password2", ""):
+            flash(T("register.mismatch"), "error")
+        elif db.query("SELECT id FROM users WHERE email=? OR username=?", (email, email), one=True):
+            flash(T("register.email_taken"), "error")
         else:
-            uid = db.execute("INSERT INTO users(username,password_hash,role,name,phone,district,lang) VALUES (?,?,?,?,?,?,?)",
-                             (username, generate_password_hash(f["password"]), "farmer", f["name"].strip(),
-                              f.get("phone"), f.get("district"), g.lang))
+            uid = db.execute("INSERT INTO users(username,email,password_hash,role,name,phone,district,lang) VALUES (?,?,?,?,?,?,?,?)",
+                             (email, email, generate_password_hash(pw), "farmer", name,
+                              f.get("phone", "").strip() or None, f.get("district", "").strip() or None, g.lang))
+            session.clear()
             session["uid"] = uid
+            session["lang"] = g.lang
             flash(T("register.ok"), "ok")
             return redirect(url_for("farm_new"))
-    return render_template("register.html")
+        return render_template("register.html", form=f)
+    return render_template("register.html", form={})
 
 
 # ---------------------------------------------------------------- farmer
@@ -303,7 +316,7 @@ def farmer_home():
             top, src, today_w, r = [], "error", None, {"stage": "", "das": None}
         cards.append({"farm": f, "risks": top, "source": src, "today": today_w, "stage": r["stage"], "das": r["das"]})
     alerts = db.query("SELECT * FROM alerts WHERE user_id=? ORDER BY is_read, id DESC LIMIT 8", (g.user["id"],))
-    due = db.query("SELECT fu.*, r.image_path, COALESCE(r.final_label, r.ai_label) label FROM followups fu "
+    due = db.query("SELECT fu.*, r.image_path, COALESCE(r.final_label, r.ai_label) AS label FROM followups fu "
                    "JOIN reports r ON r.id=fu.report_id WHERE r.user_id=? AND fu.status='due' ORDER BY fu.due_date LIMIT 5",
                    (g.user["id"],))
     reports = db.query("SELECT * FROM reports WHERE user_id=? ORDER BY id DESC LIMIT 6", (g.user["id"],))
@@ -466,7 +479,12 @@ def diagnose():
     name = f"{uuid.uuid4().hex[:16]}.jpg"
     save = img.convert("RGB")
     save.thumbnail((900, 900))
-    save.save(os.path.join(UPLOAD_DIR, name), quality=88)
+    if db.IS_PG:
+        buf = io.BytesIO()
+        save.save(buf, format="JPEG", quality=85)
+        db.execute("INSERT INTO images(name, data) VALUES (?, ?) RETURNING name", (name, buf.getvalue()))
+    else:
+        save.save(os.path.join(UPLOAD_DIR, name), quality=88)
 
     d = kb.DISEASES.get(pred["label"], {})
     reasons = []
@@ -539,18 +557,21 @@ def report_view(rid):
 @app.route("/followup/<int:fid>", methods=["POST"])
 @login_required()
 def followup_done(fid):
-    fu = db.query("SELECT fu.*, r.user_id, r.farm_id, r.id rid, COALESCE(r.final_label, r.ai_label) label "
+    fu = db.query("SELECT fu.*, r.user_id, r.farm_id, r.id AS rid, COALESCE(r.final_label, r.ai_label) AS label "
                   "FROM followups fu JOIN reports r ON r.id=fu.report_id WHERE fu.id=?", (fid,), one=True)
     if not fu or (fu["user_id"] != g.user["id"] and not is_staff()):
         abort(404)
     outcome = request.form.get("outcome")
-    db.execute("UPDATE followups SET status='done', outcome=?, note=?, done_at=datetime('now','localtime') WHERE id=?",
-               (outcome, request.form.get("note"), fid))
+    db.execute("UPDATE followups SET status='done', outcome=?, note=?, done_at=? WHERE id=?",
+               (outcome, request.form.get("note"), db.now(), fid))
     if outcome == "worse":
         for sid in staff_ids():
             add_alert(sid, fu["farm_id"], "worse", "high", fu["label"], json.dumps({"report": fu["rid"]}), dedupe_days=0)
-        db.execute("UPDATE reports SET referred=1, referral_reason=TRIM(IFNULL(referral_reason,'')||',not_improving',',') WHERE id=?",
-                   (fu["rid"],))
+        rr = db.query("SELECT referral_reason FROM reports WHERE id=?", (fu["rid"],), one=True)["referral_reason"] or ""
+        reasons = [x for x in rr.split(",") if x]
+        if "not_improving" not in reasons:
+            reasons.append("not_improving")
+        db.execute("UPDATE reports SET referred=1, referral_reason=? WHERE id=?", (",".join(reasons), fu["rid"]))
     if outcome in ("same", "worse"):
         db.execute("INSERT INTO followups(report_id,due_date) VALUES (?,?)",
                    (fu["rid"], (dt.date.today() + dt.timedelta(days=5)).isoformat()))
@@ -613,11 +634,11 @@ def officer_home():
     rows = db.query("SELECT r.*, u.name farmer_name FROM reports r LEFT JOIN users u ON u.id=r.user_id "
                     "WHERE r.status=? ORDER BY r.id DESC LIMIT 200", (status,))
     rows = sorted(rows, key=lambda r: -_priority(r)) if status == "pending" else rows
-    counts = {s: db.query("SELECT COUNT(*) c FROM reports WHERE status=?", (s,), one=True)["c"]
+    counts = {s: db.query("SELECT COUNT(*) AS c FROM reports WHERE status=?", (s,), one=True)["c"]
               for s in ("pending", "confirmed", "corrected", "rejected")}
     traps = db.query("SELECT t.*, f.name farm_name, f.district FROM trap_readings t JOIN farms f ON f.id=t.farm_id "
                      "WHERE t.above_etl=1 ORDER BY t.id DESC LIMIT 8")
-    worse = db.query("SELECT fu.*, COALESCE(r.final_label, r.ai_label) label, r.id rid, u.name farmer_name FROM followups fu "
+    worse = db.query("SELECT fu.*, COALESCE(r.final_label, r.ai_label) AS label, r.id AS rid, u.name farmer_name FROM followups fu "
                      "JOIN reports r ON r.id=fu.report_id JOIN users u ON u.id=r.user_id "
                      "WHERE fu.outcome='worse' ORDER BY fu.done_at DESC LIMIT 8")
     return render_template("officer_home.html", rows=rows, counts=counts, status=status, traps=traps, worse=worse,
@@ -650,9 +671,9 @@ def officer_review(rid):
         chem = int(status in ("confirmed", "corrected") and severity in ("medium", "high")
                    and bool(kb.DISEASES.get(final, {}).get("chemical")))
         db.execute("UPDATE reports SET status=?, final_label=?, severity=?, officer_id=?, officer_note=?, referred=?, "
-                   "lab_id=?, chemical_advised=?, validated_at=datetime('now','localtime') WHERE id=?",
+                   "lab_id=?, chemical_advised=?, validated_at=? WHERE id=?",
                    (status, final, severity if final else None, g.user["id"], request.form.get("note"), refer,
-                    lab_id, chem, rid))
+                    lab_id, chem, db.now(), rid))
         if final and status in ("confirmed", "corrected"):
             emb = os.path.join(EMB_DIR, f"r{rid}.npy")
             if os.path.exists(emb):
@@ -728,7 +749,7 @@ def admin_model():
 def _record_version(res):
     conn = db.connect()
     if res["accepted"]:
-        conn.execute("UPDATE model_versions SET active=0")
+        conn.execute("UPDATE model_versions SET active=0 WHERE active=1")
     conn.execute("INSERT INTO model_versions(version,test_accuracy,feedback_accuracy,n_feedback,active,notes) VALUES (?,?,?,?,?,?)",
                  (res["version"], res["test_accuracy"], res["feedback_accuracy"], res["n_feedback"], int(res["accepted"]),
                   "accepted" if res["accepted"] else "rejected: accuracy dropped"))
@@ -743,6 +764,9 @@ def media(name):
     for d in (UPLOAD_DIR, BUNDLED_UPLOADS):
         if os.path.exists(os.path.join(d, name)):
             return send_from_directory(d, name, max_age=86400)
+    row = db.query("SELECT data FROM images WHERE name=?", (name,), one=True)
+    if row:
+        return Response(bytes(row["data"]), mimetype="image/jpeg", headers={"Cache-Control": "public, max-age=86400"})
     abort(404)
 
 
@@ -767,7 +791,7 @@ def api_hotspots():
 def api_reports():
     days = request.args.get("days", 30, type=int)
     since = (dt.datetime.now() - dt.timedelta(days=days)).strftime("%Y-%m-%d")
-    rows = db.query("SELECT id, lat, lon, status, ai_conf, district, created_at, COALESCE(final_label, ai_label) label "
+    rows = db.query("SELECT id, lat, lon, status, ai_conf, district, created_at, COALESCE(final_label, ai_label) AS label "
                     "FROM reports WHERE lat IS NOT NULL AND created_at>=?", (since,))
     return jsonify([dict(r) | {"name": label_name(r["label"]),
                                "type": kb.DISEASES.get(r["label"], {}).get("type")} for r in rows])
@@ -837,9 +861,9 @@ def api_stats():
     for r in rows:
         if r["ai_conf"] is not None:
             conf_bins[min(9, int(r["ai_conf"] * 10))] += 1
-    fu = {o: db.query("SELECT COUNT(*) c FROM followups WHERE outcome=?", (o,), one=True)["c"] for o in ("better", "same", "worse")}
-    fu["due"] = db.query("SELECT COUNT(*) c FROM followups WHERE status='due'", one=True)["c"]
-    traps = db.query("SELECT pest, COUNT(*) n, SUM(above_etl) above FROM trap_readings WHERE created_at>=? GROUP BY pest", (since,))
+    fu = {o: db.query("SELECT COUNT(*) AS c FROM followups WHERE outcome=?", (o,), one=True)["c"] for o in ("better", "same", "worse")}
+    fu["due"] = db.query("SELECT COUNT(*) AS c FROM followups WHERE status='due'", one=True)["c"]
+    traps = db.query("SELECT pest, COUNT(*) AS n, SUM(above_etl) AS above FROM trap_readings WHERE created_at>=? GROUP BY pest", (since,))
     top_d = sorted(by_disease.items(), key=lambda x: -x[1])[:10]
     return jsonify({
         "kpi": {
@@ -852,7 +876,7 @@ def api_stats():
             "hotspots": len(current_hotspots()),
             "coverage": round(100 * len(villages_seen & villages_all) / len(villages_all), 1) if villages_all else None,
             "no_chem_pct": round(100 * no_chem / len(confirmed_disease), 1) if confirmed_disease else None,
-            "farms": db.query("SELECT COUNT(*) c FROM farms", one=True)["c"],
+            "farms": db.query("SELECT COUNT(*) AS c FROM farms", one=True)["c"],
         },
         "weekly": [{"week": k, **v} for k, v in sorted(weeks.items())],
         "top_diseases": [{"label": k, "name": label_name(k), "n": v} for k, v in top_d],

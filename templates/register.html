@@ -3,17 +3,26 @@
 {% block content %}
 <div class="card" style="max-width:480px;margin:24px auto">
   <h1>{{ t('register.title') }}</h1>
-  <form method="post">
-    <div class="field"><label>{{ t('form.name') }}</label><input name="name" required></div>
+  <form method="post" autocomplete="on">
+    <div class="field"><label for="name">{{ t('form.name') }}</label>
+      <input id="name" name="name" required value="{{ form.get('name', '') }}" autocomplete="name"></div>
+    <div class="field"><label for="email">{{ t('form.email') }}</label>
+      <input id="email" name="email" type="email" required value="{{ form.get('email', '') }}" autocomplete="email" placeholder="name@example.com"></div>
     <div class="grid g2">
-      <div class="field"><label>{{ t('form.username') }}</label><input name="username" required autocomplete="username"></div>
-      <div class="field"><label>{{ t('form.password') }}</label><input name="password" type="password" minlength="6" required autocomplete="new-password"></div>
+      <div class="field"><label for="password">{{ t('form.password') }}</label>
+        <input id="password" name="password" type="password" minlength="6" required autocomplete="new-password"></div>
+      <div class="field"><label for="password2">{{ t('form.password2') }}</label>
+        <input id="password2" name="password2" type="password" minlength="6" required autocomplete="new-password"></div>
     </div>
+    <div class="hint" style="margin:-6px 0 12px">{{ t('register.pw_hint') }}</div>
     <div class="grid g2">
-      <div class="field"><label>{{ t('form.phone') }}</label><input name="phone" inputmode="tel"></div>
-      <div class="field"><label>{{ t('form.district') }}</label><input name="district"></div>
+      <div class="field"><label for="phone">{{ t('form.phone') }}</label>
+        <input id="phone" name="phone" inputmode="tel" value="{{ form.get('phone', '') }}" autocomplete="tel"></div>
+      <div class="field"><label for="district">{{ t('form.district') }}</label>
+        <input id="district" name="district" value="{{ form.get('district', '') }}"></div>
     </div>
     <button class="btn" style="width:100%">{{ t('register.submit') }}</button>
   </form>
+  <p class="muted" style="margin-top:14px">{{ t('register.have') }} <a href="{{ url_for('login') }}">{{ t('nav.login') }}</a></p>
 </div>
 {% endblock %}

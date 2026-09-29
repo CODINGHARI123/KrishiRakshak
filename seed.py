@@ -120,14 +120,14 @@ def main():
 
     # ---------------- users
     pw = lambda p: generate_password_hash(p)
-    admin = ins("INSERT INTO users(username,password_hash,role,name,district,lang) VALUES (?,?,?,?,?,?)",
-                ("admin", pw("admin123"), "admin", "District Agriculture Officer", "Pune", "en"))
-    officer = ins("INSERT INTO users(username,password_hash,role,name,phone,district,lang) VALUES (?,?,?,?,?,?,?)",
-                  ("officer", pw("officer123"), "officer", "A. Kulkarni (Extension Officer)", "90000 00001", "Pune", "en"))
-    officer2 = ins("INSERT INTO users(username,password_hash,role,name,phone,district,lang) VALUES (?,?,?,?,?,?,?)",
-                   ("officer2", pw("officer123"), "officer", "K. Reddy (Extension Officer)", "90000 00002", "Guntur", "te"))
-    demo = ins("INSERT INTO users(username,password_hash,role,name,phone,district,lang) VALUES (?,?,?,?,?,?,?)",
-               ("farmer", pw("farmer123"), "farmer", "Ramesh Patil", "90000 11111", "Pune", "en"))
+    admin = ins("INSERT INTO users(username,email,password_hash,role,name,district,lang) VALUES (?,?,?,?,?,?,?)",
+                ("admin", "admin@example.com", pw("admin123"), "admin", "District Agriculture Officer", "Pune", "en"))
+    officer = ins("INSERT INTO users(username,email,password_hash,role,name,phone,district,lang) VALUES (?,?,?,?,?,?,?,?)",
+                  ("officer", "officer@example.com", pw("officer123"), "officer", "A. Kulkarni (Extension Officer)", "90000 00001", "Pune", "en"))
+    officer2 = ins("INSERT INTO users(username,email,password_hash,role,name,phone,district,lang) VALUES (?,?,?,?,?,?,?,?)",
+                   ("officer2", "officer2@example.com", pw("officer123"), "officer", "K. Reddy (Extension Officer)", "90000 00002", "Guntur", "te"))
+    demo = ins("INSERT INTO users(username,email,password_hash,role,name,phone,district,lang) VALUES (?,?,?,?,?,?,?,?)",
+               ("farmer", "farmer@example.com", pw("farmer123"), "farmer", "Ramesh Patil", "90000 11111", "Pune", "en"))
 
     # ---------------- labs
     for dist, villages in REGIONS.items():
@@ -149,8 +149,8 @@ def main():
                 fl, ll = NAMES[LANG_OF.get(dist, "hi")]
                 name = f"{random.choice(fl)} {random.choice(ll)}"
                 uname = f"f{len(farms) + 1:03d}"
-                uid = ins("INSERT INTO users(username,password_hash,role,name,district,lang) VALUES (?,?,?,?,?,?)",
-                          (uname, pw(os.urandom(8).hex()), "farmer", name, dist,
+                uid = ins("INSERT INTO users(username,email,password_hash,role,name,district,lang) VALUES (?,?,?,?,?,?,?)",
+                          (uname, f"{uname}@example.com", pw(os.urandom(8).hex()), "farmer", name, dist,
                            LANG_OF.get(dist, "hi")))
                 crop = random.choice(crops)
                 farms.append(_farm(ins, uid, f"{name.split()[0]}'s {kb.CROPS[crop]['en']} plot", vname, dist, vlat, vlon, crop))
